@@ -17,7 +17,7 @@ access controls such as firewall rules, routes, and Cloud NAT.
 * `private` - only accessible from your network or private Google services
 
 * [network-application](/modules/network-application): Launch a network meant to
-house applications. The network includes 3 "tiers" of subnetwork, each
+house applications. The network includes 3 "tiers" of subnetworks, each
 protected by tier-appropriate network and subnetwork-level access controls such
 as firewall rules, routes, and Cloud NAT.
 
