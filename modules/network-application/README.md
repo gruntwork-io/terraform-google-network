@@ -27,7 +27,7 @@ it.
 
 Networks are global on GCP, and they're split into subnetworks, ranges of
 private IP addresses defined at the regional level. You can control traffic in
-and out of your networks- as well as individual instances- with firewall rules.
+and out of your networks -as well as individual instances- with firewall rules.
 <!-- TODO(rileykarson): Expand on GCP network features -->
 
 ## Subnetwork Tiers
