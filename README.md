@@ -44,6 +44,8 @@ projects in the organization as part of a defense-in-depth security strategy,
 and to allow service-level billing across different teams within your
 organization.
 
+<!-- TODO: Document Bastion Host, OpenVPC, Firewall modules -->
+
 Click on each module above to see its documentation. Head over to the [examples folder](/examples) for examples.
 
 ## What's a VPC?
