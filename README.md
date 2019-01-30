@@ -5,29 +5,20 @@ on Google Cloud Platform (GCP) following best practices.
 
 #### Main Modules
 
-The two main modules are:
+The primary module is:
 
-* [network-management](/modules/network-management): Launch a network meant to
+* [vpc-network](/modules/vpc-network): Launch a network meant to
 house DevOps and other management services. The network includes 2 "tiers" of
-subnetwork, each protected by tier-appropriate network and subnetwork-level
-access controls such as firewall rules, routes, and Cloud NAT.
+subnetwork, as well as an optional third, each protected by tier-appropriate
+network and subnetwork-level access controls such as firewall rules, routes, and
+Cloud NAT.
 
-* `public` - accessible from the public internet
+  * `public` - accessible from the public internet
 
-* `private` - only accessible from your network or private Google services
+  * `private` - only accessible from your network or private Google services
 
-* [network-application](/modules/network-application): Launch a network meant to
-house applications. The network includes 3 "tiers" of subnetworks, each
-protected by tier-appropriate network and subnetwork-level access controls such
-as firewall rules, routes, and Cloud NAT.
-
-* `public` - accessible from the public internet
-
-* `private app` - only accessible from within your network or private Google
-services
-
-* `private persistence` - only accessible from your network (excluding `public`)
-or private Google services
+  * `private persistence` - optionally configured, only accessible from your
+network (excluding the `public` subnetwork) or private Google services
 
 #### Supporting Modules
 

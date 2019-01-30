@@ -4,7 +4,7 @@ The Network Peering module creates [VPC network peering connections](https://clo
 between networks. Normall networks are isolated, but some traffic may need to
 flow between them, such as allowing DevOps tools running in a
 [management network](../network-management) to talk to apps or services in an
-[application network](../network-application).
+[application network](../vpc-network).
 
 When using a [host project](../project-host-configuration) with component host
 networks, peerings should be made in the host project.
