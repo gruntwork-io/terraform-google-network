@@ -5,8 +5,8 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_network" "vpc" {
-  name                    = "${var.name}-network"
-  project                 = "${var.project}"
+  name    = "${var.name}-network"
+  project = "${var.project}"
 
   # Always define custom subnetworks- one subnetwork for region isn't useful for an opinionated setup
   auto_create_subnetworks = "false"
@@ -27,15 +27,15 @@ resource "google_compute_router" "vpc_router" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_subnetwork" "vpc_subnetwork_public" {
-  name          = "${var.name}-subnetwork-public"
-  region        = "${var.region}"
-  network       = "${google_compute_network.vpc.self_link}"
+  name    = "${var.name}-subnetwork-public"
+  region  = "${var.region}"
+  network = "${google_compute_network.vpc.self_link}"
 
   private_ip_google_access = true
-  ip_cidr_range = "10.0.0.0/24"
+  ip_cidr_range            = "10.0.0.0/24"
 
   secondary_ip_range {
-    range_name = "app-services"
+    range_name    = "app-services"
     ip_cidr_range = "10.0.1.0/24"
   }
 
@@ -66,12 +66,12 @@ resource "google_compute_router_nat" "vpc_nat" {
 }
 
 resource "google_compute_subnetwork" "vpc_subnetwork_private" {
-  name          = "${var.name}-subnetwork-private"
-  region        = "${var.region}"
-  network       = "${google_compute_network.vpc.self_link}"
+  name    = "${var.name}-subnetwork-private"
+  region  = "${var.region}"
+  network = "${google_compute_network.vpc.self_link}"
 
   private_ip_google_access = true
-  ip_cidr_range = "10.0.2.0/24"
+  ip_cidr_range            = "10.0.2.0/24"
 
   #TODO - what does this field do?
   enable_flow_logs = false
