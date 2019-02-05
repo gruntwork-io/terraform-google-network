@@ -17,6 +17,7 @@ resource "google_compute_network" "vpc" {
 
 resource "google_compute_router" "vpc_router" {
   name    = "${var.name}-router"
+  region  = "${var.region}"
   network = "${google_compute_network.vpc.self_link}"
 }
 
