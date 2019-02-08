@@ -8,7 +8,7 @@ resource "google_compute_network" "vpc" {
   name    = "${var.name}-network"
   project = "${var.project}"
 
-  # Always define custom subnetworks- one subnetwork for region isn't useful for an opinionated setup
+  # Always define custom subnetworks- one subnetwork per region isn't useful for an opinionated setup
   auto_create_subnetworks = "false"
 
   # A global routing mode can have an unexpected impact on load balancers; always use a regional mode
