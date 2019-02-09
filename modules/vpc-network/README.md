@@ -45,6 +45,14 @@ services
 * `private persistence` - (Optional) only accessible from your network (excluding `public`)
 or private Google services
 
+## What is Private Google Access?
+
+[Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access)
+is a GCP feature where instances within your network that don't have public IP
+addresses assigned can  access most Google APIs and services without NAT or a
+bastion. Private Google Access is enabled at the subnetwork level, and
+subnetworks created using this module will have Private Google Access enabled.
+
 ## Network Architecture
 
 This network architecture is inspired by the VPC Architecture described by Ben
