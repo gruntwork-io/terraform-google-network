@@ -3,8 +3,8 @@
 The Network Peering module creates [VPC network peering connections](https://cloud.google.com/vpc/docs/vpc-peering)
 between networks. Normal networks are isolated, but some traffic may need to
 flow between them, such as allowing DevOps tools running in a
-[management network](../network-management) to talk to apps or services in an
-[application network](../vpc-network).
+[management network](../../examples/network-management) to talk to apps or services in an
+[application network](../../examples/network-host-application).
 
 When using a [host project](../project-host-configuration) with component host
 networks, peerings should be made in the host project.
