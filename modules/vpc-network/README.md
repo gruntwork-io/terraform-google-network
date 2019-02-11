@@ -53,6 +53,33 @@ addresses assigned can  access most Google APIs and services without NAT or a
 bastion. Private Google Access is enabled at the subnetwork level, and
 subnetworks created using this module will have Private Google Access enabled.
 
+## What is alias IP?
+
+An [alias IP range](https://cloud.google.com/vpc/docs/alias-ip) allows you to
+use a different IP address for each of your services such as container pods on a
+VM.
+
+When using alias IP, anti-spoofing checks are performed against traffic,
+ensuring that traffic exiting VMs uses VM IP addresses and pod IP addresses as
+source addresses, and that that VMs do not send traffic with arbitrary source IP
+addresses.
+
+When you configure separate address ranges for VMs and their services, you can
+set up firewall rules for alias ranges separately from the primary range. For
+example, you can allow certain traffic for container pods and deny similar
+traffic for the VM's primary IP address.
+
+### How is a secondary range connected to an alias IP range?
+
+While all subnetworks have a primary address range, the range VM's internal
+addresses are drawn from, and alias IPs could be drawn from the primary range,
+subnetworks can also define a secondary range for exclusive use with alias
+IP ranges. This simplifies constructing firewall rules, and helps an
+organisation ensure that services are running securely in containers distinct
+from the VM.
+
+This module automatically configures secondary ranges for use with alias IP.
+
 ## Network Architecture
 
 This network architecture is inspired by the VPC Architecture described by Ben
