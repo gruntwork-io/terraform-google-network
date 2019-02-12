@@ -32,11 +32,11 @@ resource "google_compute_subnetwork" "vpc_subnetwork_public" {
   network = "${google_compute_network.vpc.self_link}"
 
   private_ip_google_access = true
-  ip_cidr_range            = "10.0.0.0/24"
+  ip_cidr_range            = "${cidrsubnet(var.cidr_block, var.cidr_subnetwork_width_delta, 0)}"
 
   secondary_ip_range {
-    range_name    = "app-services"
-    ip_cidr_range = "10.0.1.0/24"
+    range_name    = "public-services"
+    ip_cidr_range = "${cidrsubnet(var.secondary_cidr_block, var.secondary_cidr_subnetwork_width_delta, 0)}"
   }
 
   #TODO - what does this field do?
@@ -71,7 +71,12 @@ resource "google_compute_subnetwork" "vpc_subnetwork_private" {
   network = "${google_compute_network.vpc.self_link}"
 
   private_ip_google_access = true
-  ip_cidr_range            = "10.0.2.0/24"
+  ip_cidr_range            = "${cidrsubnet(var.cidr_block, var.cidr_subnetwork_width_delta, 1 * (1 + var.cidr_subnetwork_spacing))}"
+
+  secondary_ip_range {
+    range_name    = "private-services"
+    ip_cidr_range = "${cidrsubnet(var.secondary_cidr_block, var.secondary_cidr_subnetwork_width_delta, 1 * (1 + var.secondary_cidr_subnetwork_spacing))}"
+  }
 
   #TODO - what does this field do?
   enable_flow_logs = false
