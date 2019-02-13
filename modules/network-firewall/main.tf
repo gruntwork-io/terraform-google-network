@@ -1,13 +1,13 @@
 // Use subnetwork datasources so we can interpolate ranges off of them.
 // TODO: Use self_link directly when https://github.com/GoogleCloudPlatform/magic-modules/pull/1377
 // is merged
-data "google_compute_subnetwork" "public-subnetwork" {
+data "google_compute_subnetwork" "public_subnetwork" {
   name    = "${basename(var.public_subnetwork)}"
   region  = "${var.region}"
   project = "${var.project}"
 }
 
-data "google_compute_subnetwork" "private-subnetwork" {
+data "google_compute_subnetwork" "private_subnetwork" {
   name    = "${basename(var.public_subnetwork)}"
   region  = "${var.region}"
   project = "${var.project}"
@@ -44,10 +44,10 @@ resource "google_compute_firewall" "private_allow_all_network_inbound" {
   direction   = "INGRESS"
 
   source_ranges = [
-    "${data.google_compute_subnetwork.public-subnetwork.ip_cidr_range}",
-    "${data.google_compute_subnetwork.public-subnetwork.secondary_ip_range.0.ip_cidr_range}",
-    "${data.google_compute_subnetwork.private-subnetwork.ip_cidr_range}",
-    "${data.google_compute_subnetwork.private-subnetwork.secondary_ip_range.0.ip_cidr_range}",
+    "${data.google_compute_subnetwork.public_subnetwork.ip_cidr_range}",
+    "${data.google_compute_subnetwork.public_subnetwork.secondary_ip_range.0.ip_cidr_range}",
+    "${data.google_compute_subnetwork.private_subnetwork.ip_cidr_range}",
+    "${data.google_compute_subnetwork.private_subnetwork.secondary_ip_range.0.ip_cidr_range}",
   ]
 
   priority = "1000"
@@ -69,10 +69,10 @@ resource "google_compute_firewall" "private_allow_restricted_network_inbound" {
   direction   = "INGRESS"
 
   source_ranges = [
-    "${data.google_compute_subnetwork.public-subnetwork.ip_cidr_range}",
-    "${data.google_compute_subnetwork.public-subnetwork.secondary_ip_range.0.ip_cidr_range}",
-    "${data.google_compute_subnetwork.private-subnetwork.ip_cidr_range}",
-    "${data.google_compute_subnetwork.private-subnetwork.secondary_ip_range.0.ip_cidr_range}",
+    "${data.google_compute_subnetwork.public_subnetwork.ip_cidr_range}",
+    "${data.google_compute_subnetwork.public_subnetwork.secondary_ip_range.0.ip_cidr_range}",
+    "${data.google_compute_subnetwork.private_subnetwork.ip_cidr_range}",
+    "${data.google_compute_subnetwork.private_subnetwork.secondary_ip_range.0.ip_cidr_range}",
   ]
 
   source_tags = ["private", "private-persistence"]
