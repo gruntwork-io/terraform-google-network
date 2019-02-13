@@ -31,19 +31,34 @@ provided in this module.
 
 See [the repo's root README](../../README.md) to learn more about VPC networks.
 
-## Subnetwork Tiers
+## Access Tier
 
-<!-- TODO(rileykarson): Expand more thoroughly on tier capabilities -->
-A VPC network defines these "tiers" of subnetworks;
+In this module, there are several "access tiers"- the pair of an instance's
+subnetwork and [network `tags`](https://cloud.google.com/vpc/docs/add-remove-network-tags).
+By placing instances in the appropriate subnetworks and using restrictive
+network tags, you can guarantee that only the intended traffic is able to reach
+your infrastructure.
 
-* `public` - accessible from the public internet
+Instances in the network must be tagged with the following network tags in order
+for inbound traffic to be allowed to reach them. All other inbound traffic is
+denied, including internal traffic;
 
-* `private` - only accessible from within your network or private Google
-services
+* `public` - allow inbound traffic from all sources
 
-<!-- TODO(rileykarson): Are private persistence subnetworks necessary? -->
-* `private persistence` - (Optional) only accessible from your network (excluding `public`)
-or private Google services
+* `private` - allow inbound traffic from within this network
+
+* `private-persistence` - allow inbound traffic from tagged sources within this
+network, excluding instances tagged `public`
+
+See the [network-firewall](../network-firewall) submodule for more details.
+
+A VPC network defines two subnetworks instances can reside in;
+
+* `public` - instances are able to communicate over the public internet through
+Cloud NAT if an external IP was not provided
+
+* `private` - instances are exclusively able to communicate within your network
+or with private Google services if an external IP was not provided
 
 ## What is Private Google Access?
 
@@ -94,19 +109,21 @@ disabled by settings `enable_flow_logging` to false.
 
 This network architecture is inspired by the VPC Architecture described by Ben
 Whaley in his blog post [A Reference VPC Architecture](https://www.whaletech.co/2014/10/02/reference-vpc-architecture.html).
-Notably, the hard distinction between "Application" and "Management" in terms of
-subnetwork tiers has been removed- either can include or exclude the persistence
-tier.
+Notably, while the reference architecture made the distinction between machines
+by subnetwork tier, this module uses [network `tags`](https://cloud.google.com/vpc/docs/add-remove-network-tags)
+to do so.
 
-Instead, Whaley's "Application" networks are generally host networks with
-attached service projects, and "Management" networks should be used with
+Additionally, the hard distinction between "Application" and "Management" in
+terms of tiers has been removed- either can include or exclude "persistence"
+instances. Instead, Whaley's "Application" networks are generally host networks
+with attached service projects, and "Management" networks should be used with
 services inside the same project. 
-
-<!-- TODO(rileykarson): Expand on how the reference arch maps to GCP -->
 
 ## Gotchas
 
-<!-- TODO(rileykarson): Add gotchas as they become apparent -->
+In order to allow any inter-network communication, instances *must* be tagged
+with one of `public`, `private`, or `private-persistence`. See the
+[network-firewall](../network-firewall) submodule for more details.
 
 ## What IAM roles does this module configure? (unimplemented)
 
