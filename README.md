@@ -12,7 +12,7 @@ The primary module is:
 Inbound traffic to instances in the network is controlled by "access tiers", a
 pair of subnetwork and [network `tags`](https://cloud.google.com/vpc/docs/add-remove-network-tags).
 By defining an appropriate subnetwork and tag for an instance, you'll ensure
-that traffic to and from the instance is appropriately restricted. See
+that traffic to and from the instance is properly restricted. See
 [the Access Tier table](/modules/vpc-network#access-tier) for more details.
 
 #### Supporting Modules
