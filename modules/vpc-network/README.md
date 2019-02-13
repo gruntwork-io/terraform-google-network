@@ -80,6 +80,16 @@ from the VM.
 
 This module automatically configures secondary ranges for use with alias IP.
 
+## What are VPC Flow Logs?
+
+[VPC Flow Logs](https://cloud.google.com/vpc/docs/using-flow-logs) are a feature
+where subnetworks in your network will have their traffic flow between VM
+instances sampled and sent to Stackdriver; there, you can use them for a variety
+of purposes including forensics and expense optimization. Only TCP and UDP
+traffic is logged. Flow logging is enabled by default in this module, and can be
+disabled by settings `enable_flow_logging` to false.
+
+
 ## Network Architecture
 
 This network architecture is inspired by the VPC Architecture described by Ben
