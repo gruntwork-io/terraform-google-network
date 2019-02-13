@@ -7,18 +7,13 @@ on Google Cloud Platform (GCP) following best practices.
 
 The primary module is:
 
-* [vpc-network](/modules/vpc-network): Launch a network meant to
-house DevOps and other management services. The network includes 2 "tiers" of
-subnetwork, as well as an optional third, each protected by tier-appropriate
-network and subnetwork-level access controls such as firewall rules, routes, and
-Cloud NAT.
+* [vpc-network](/modules/vpc-network): Launch a secure VPC network on GCP.
 
-  * `public` - accessible from the public internet
-
-  * `private` - only accessible from your network or private Google services
-
-  * `private persistence` - optionally configured, only accessible from your
-network (excluding the `public` subnetwork) or private Google services
+Inbound traffic to instances in the network is controlled by "access tiers", a
+pair of subnetwork and [network `tags`](https://cloud.google.com/vpc/docs/add-remove-network-tags).
+By defining an appropriate subnetwork and tag for an instance, you'll ensure
+that traffic to and from the instance is appropriately restricted. See
+[the Access Tier table](/modules/vpc-network#access-tier) for more details.
 
 #### Supporting Modules
 

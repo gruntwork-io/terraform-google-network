@@ -23,7 +23,8 @@ resource "google_compute_router" "vpc_router" {
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Public Subnetwork Config
-# Public internet access is automatically configured by the default gateway for 0.0.0.0/0
+# Public internet access for instances with addresses is automatically configured by the default gateway for 0.0.0.0/0
+# External access is configured with Cloud NAT, which subsumes egress traffic for instances without external addresses
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_subnetwork" "vpc_subnetwork_public" {
@@ -43,11 +44,6 @@ resource "google_compute_subnetwork" "vpc_subnetwork_public" {
   enable_flow_logs = false
 }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# Private Subnetwork Config
-# External access is configured with Cloud NAT, which subsumes egress traffix
-# ---------------------------------------------------------------------------------------------------------------------
-
 resource "google_compute_router_nat" "vpc_nat" {
   name   = "${var.name}-nat"
   router = "${google_compute_router.vpc_router.name}"
@@ -60,10 +56,14 @@ resource "google_compute_router_nat" "vpc_nat" {
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
 
   subnetwork {
-    name                    = "${google_compute_subnetwork.vpc_subnetwork_private.self_link}"
+    name                    = "${google_compute_subnetwork.vpc_subnetwork_public.self_link}"
     source_ip_ranges_to_nat = ["ALL_IP_RANGES"]
   }
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Private Subnetwork Config
+# ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_subnetwork" "vpc_subnetwork_private" {
   name    = "${var.name}-subnetwork-private"
@@ -80,4 +80,19 @@ resource "google_compute_subnetwork" "vpc_subnetwork_private" {
 
   #TODO - what does this field do?
   enable_flow_logs = false
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Attach Firewall Rules to allow inbound traffic to tagged instances
+# ---------------------------------------------------------------------------------------------------------------------
+
+module "network_firewall" {
+  source = "../network-firewall"
+
+  project = "${var.project}"
+  region  = "${var.region}"
+  network = "${google_compute_network.vpc.self_link}"
+
+  public_subnetwork  = "${google_compute_subnetwork.vpc_subnetwork_public.self_link}"
+  private_subnetwork = "${google_compute_subnetwork.vpc_subnetwork_private.self_link}"
 }
