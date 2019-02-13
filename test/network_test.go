@@ -22,18 +22,36 @@ func TestNetworkManagement(t *testing.T) {
 
 	terraform.InitAndApply(t, terratestOptions)
 
-	// Testing the cidr block itself is just reading the value out of the Terraform config;
-	// by testing the gateway addresses, we've confirmed that the API had allocated the correct
-	// block, although not necessarily the correct size.
-	outputPublicGateway := terraform.Output(t, terratestOptions, "public_subnetwork_gateway")
-	expectedPublicGateway := "10.0.0.1"
-	if outputPublicGateway != expectedPublicGateway {
-		t.Fatalf("expected a public gateway of %s but saw %s", expectedPublicGateway, outputPublicGateway)
+	// Guarantee that we see expected values from state
+	var stateValues = []struct {
+		outputKey  string
+		expectedValue string
+
+		// With two string insertion points
+		message string
+	}{
+		// Testing the cidr block itself is just reading the value out of the Terraform config;
+		// by testing the gateway addresses, we've confirmed that the API had allocated the correct
+		// block, although not necessarily the correct size.
+		{"public_subnetwork_gateway", "10.0.0.1", "expected a public gateway of %s but saw %s"},
+		{"private_subnetwork_gateway", "10.0.16.1", "expected a public gateway of %s but saw %s"},
+
+		// Network tags as interpolation targets
+		{"public", "public", "expected a tag of %s but saw %s"},
+		{"private", "private", "expected a tag of %s but saw %s"},
+		{"private_persistence", "private-persistence", "expected a tag of %s but saw %s"},
 	}
 
-	outputPrivateGateway := terraform.Output(t, terratestOptions, "private_subnetwork_gateway")
-	expectedPrivateGateway := "10.0.16.1"
-	if outputPrivateGateway != expectedPrivateGateway {
-		t.Fatalf("expected a public gateway of %s but saw %s", expectedPrivateGateway, outputPrivateGateway)
+	for _, tt := range stateValues {
+		t.Run(tt.outputKey, func(t *testing.T) {
+			value, err := terraform.OutputE(t, terratestOptions, tt.outputKey)
+			if err != nil {
+				t.Errorf("could not find %s in outputs: %s", tt.outputKey, err)
+			}
+
+			if value != tt.expectedValue {
+				t.Errorf(tt.message, tt.expectedValue, value)
+			}
+		})
 	}
 }

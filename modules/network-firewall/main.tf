@@ -13,6 +13,14 @@ data "google_compute_subnetwork" "private_subnetwork" {
   project = "${var.project}"
 }
 
+// Define tags as locals so they can be interpolated off of + exported
+
+locals {
+  public              = "public"
+  private             = "private"
+  private_persistence = "private-persistence"
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # public - allow ingress from anywhere
 # ---------------------------------------------------------------------------------------------------------------------
@@ -21,7 +29,7 @@ resource "google_compute_firewall" "public_allow_all_inbound" {
   name    = "public-allow-all-allow"
   network = "${var.network}"
 
-  target_tags   = ["public"]
+  target_tags   = ["${local.public}"]
   direction     = "INGRESS"
   source_ranges = ["0.0.0.0/0"]
 
@@ -40,7 +48,7 @@ resource "google_compute_firewall" "private_allow_all_network_inbound" {
   name    = "private-allow-all-network-inbound"
   network = "${var.network}"
 
-  target_tags = ["private"]
+  target_tags = ["${local.private}"]
   direction   = "INGRESS"
 
   source_ranges = [
@@ -65,7 +73,7 @@ resource "google_compute_firewall" "private_allow_restricted_network_inbound" {
   name    = "private-allow-restricted-network-inbound"
   network = "${var.network}"
 
-  target_tags = ["private-persistence"]
+  target_tags = ["${local.private_persistence}"]
   direction   = "INGRESS"
 
   source_ranges = [
@@ -75,7 +83,7 @@ resource "google_compute_firewall" "private_allow_restricted_network_inbound" {
     "${data.google_compute_subnetwork.private_subnetwork.secondary_ip_range.0.ip_cidr_range}",
   ]
 
-  source_tags = ["private", "private-persistence"]
+  source_tags = ["${local.private}", "${local.private_persistence}"]
 
   priority = "1000"
 

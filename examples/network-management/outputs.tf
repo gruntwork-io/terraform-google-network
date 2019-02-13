@@ -44,3 +44,22 @@ output "private_subnetwork_gateway" {
 output "private_subnetwork_secondary_cidr_block" {
   value = "${module.management_network.private_subnetwork_secondary_cidr_block}"
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Access Tier - Network Tags
+# ---------------------------------------------------------------------------------------------------------------------
+
+output "public" {
+  description = "The network tag string used for the public access tier"
+  value       = "${module.management_network.public}"
+}
+
+output "private" {
+  description = "The network tag string used for the private access tier"
+  value       = "${module.management_network.private}"
+}
+
+output "private_persistence" {
+  description = "The network tag string used for the private-persistence access tier"
+  value       = "${module.management_network.private_persistence}"
+}

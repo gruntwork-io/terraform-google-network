@@ -44,3 +44,22 @@ output "private_subnetwork_gateway" {
 output "private_subnetwork_secondary_cidr_block" {
   value = "${google_compute_subnetwork.vpc_subnetwork_private.secondary_ip_range.0.ip_cidr_range}"
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Access Tier - Network Tags
+# ---------------------------------------------------------------------------------------------------------------------
+
+output "public" {
+  description = "The network tag string used for the public access tier"
+  value       = "${module.network_firewall.public}"
+}
+
+output "private" {
+  description = "The network tag string used for the private access tier"
+  value       = "${module.network_firewall.private}"
+}
+
+output "private_persistence" {
+  description = "The network tag string used for the private-persistence access tier"
+  value       = "${module.network_firewall.private_persistence}"
+}
