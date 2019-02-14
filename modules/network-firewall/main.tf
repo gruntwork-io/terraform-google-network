@@ -26,7 +26,7 @@ locals {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_firewall" "public_allow_all_inbound" {
-  name    = "public-allow-all-allow"
+  name    = "public-allow-all-inbound"
   network = "${var.network}"
 
   target_tags   = ["${local.public}"]
