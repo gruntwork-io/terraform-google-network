@@ -39,8 +39,7 @@ resource "google_compute_subnetwork" "vpc_subnetwork_public" {
     ip_cidr_range = "${cidrsubnet(var.secondary_cidr_block, var.secondary_cidr_subnetwork_width_delta, 0)}"
   }
 
-  #TODO - what does this field do?
-  enable_flow_logs = false
+  enable_flow_logs = "${var.enable_flow_logging}"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -78,6 +77,5 @@ resource "google_compute_subnetwork" "vpc_subnetwork_private" {
     ip_cidr_range = "${cidrsubnet(var.secondary_cidr_block, var.secondary_cidr_subnetwork_width_delta, 1 * (1 + var.secondary_cidr_subnetwork_spacing))}"
   }
 
-  #TODO - what does this field do?
-  enable_flow_logs = false
+  enable_flow_logs = "${var.enable_flow_logging}"
 }
