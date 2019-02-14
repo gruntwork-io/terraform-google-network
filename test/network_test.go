@@ -1,10 +1,13 @@
 package test
 
 import (
+
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/gcp"
+	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/gruntwork-io/terratest/modules/test-structure"
 )
@@ -17,7 +20,7 @@ func TestNetworkManagement(t *testing.T) {
 
 	project := gcp.GetGoogleProjectIDFromEnvVar(t)
 	region := gcp.GetRandomRegion(t, project, nil, nil)
-	terratestOptions := createNetworkManagementTerraformOptions(t, project, region, terraformModulePath)
+	terratestOptions := createNetworkManagementTerraformOptions(t, strings.ToLower(random.UniqueId()), project, region, terraformModulePath)
 	defer terraform.Destroy(t, terratestOptions)
 
 	terraform.InitAndApply(t, terratestOptions)

@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -8,11 +9,13 @@ import (
 
 func createNetworkManagementTerraformOptions(
 	t *testing.T,
+	uniqueId string,
 	project string,
 	region string,
 	templatePath string,
 ) *terraform.Options {
 	terraformVars := map[string]interface{}{
+		"name": fmt.Sprintf("example-management-network-%s", uniqueId),
 		"region":  region,
 		"project": project,
 	}
