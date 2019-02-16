@@ -1,14 +1,21 @@
 package test
 
 import (
+	"fmt"
+
 	"path/filepath"
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/gruntwork-io/terratest/modules/gcp"
+	"github.com/gruntwork-io/terratest/modules/retry"
+	"github.com/gruntwork-io/terratest/modules/ssh"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/gruntwork-io/terratest/modules/test-structure"
 )
 
+// TODO: Add test stages
 func TestNetworkManagement(t *testing.T) {
 	t.Parallel()
 
@@ -22,6 +29,9 @@ func TestNetworkManagement(t *testing.T) {
 
 	terraform.InitAndApply(t, terratestOptions)
 
+	/*
+	Test Outputs
+	*/
 	// Guarantee that we see expected values from state
 	var stateValues = []struct {
 		outputKey  string
@@ -54,4 +64,92 @@ func TestNetworkManagement(t *testing.T) {
 			}
 		})
 	}
+
+	/*
+	Test SSH
+	*/
+	external := FetchFromOutput(t, terratestOptions, project, "instance_default_network")
+	publicWithIp := FetchFromOutput(t, terratestOptions, project, "instance_public_with_ip")
+	publicWithoutIp := FetchFromOutput(t, terratestOptions, project, "instance_public_without_ip")
+
+	keyPair := ssh.GenerateRSAKeyPair(t, 2048)
+	sshUsername := "terratest"
+
+	// Attach the SSH Key to each instances so we can access them at will later
+	for _, v := range []*gcp.Instance{external, publicWithIp, publicWithoutIp} {
+		v.AddSshKey(t, sshUsername, keyPair.PublicKey)
+	}
+
+	// Shared settings for SSH
+	maxRetries := 20
+	sleepBetweenRetries := 3 * time.Second
+	echoText := "Hello World"
+
+	// "external internet" settings pulled from the instance in the default network
+	externalHost := ssh.Host{
+		Hostname:    external.GetPublicIp(t),
+		SshKeyPair:  keyPair,
+		SshUserName: sshUsername,
+	}
+
+	// We can SSH to the public instance w/ an IP
+	publicWithIpHost := ssh.Host{
+		Hostname:    publicWithIp.GetPublicIp(t),
+		SshKeyPair:  keyPair,
+		SshUserName: sshUsername,
+	}
+
+	// TODO: Create a semi-generic function to share common code
+	retry.DoWithRetry(t, "Attempting to SSH", maxRetries, sleepBetweenRetries, func() (string, error) {
+		output, err := ssh.CheckSshCommandE(t, publicWithIpHost, fmt.Sprintf("echo '%s'", echoText))
+		if err != nil {
+			return "", err
+		}
+
+		if strings.TrimSpace(echoText) != strings.TrimSpace(output) {
+			return "", fmt.Errorf("Expected: %s. Got: %s\n", echoText, output)
+		}
+
+		return "", nil
+	})
+
+	// We can jump from the public instance to an external public instance
+	retry.DoWithRetry(t, "Attempting to SSH", maxRetries, sleepBetweenRetries, func() (string, error) {
+		output, err := ssh.CheckPrivateSshConnectionE(t, publicWithIpHost, externalHost, fmt.Sprintf("echo '%s'", echoText))
+		if err != nil {
+			return "", err
+		}
+
+		if strings.TrimSpace(echoText) != strings.TrimSpace(output) {
+			return "", fmt.Errorf("Expected: %s. Got: %s\n", echoText, output)
+		}
+
+		return "", nil
+	})
+
+	// The public instance w/ no IP can't be accessed directly but can through a bastion
+	if _, err := publicWithoutIp.GetPublicIpE(t); err != nil {
+		t.Errorf("Found an external IP on %s when it should have had none", publicWithoutIp.Name)
+	}
+
+	publicWithoutIpHost := ssh.Host{
+		Hostname:    publicWithoutIp.Name,
+		SshKeyPair:  keyPair,
+		SshUserName: sshUsername,
+	}
+
+	retry.DoWithRetry(t, "Attempting to SSH", maxRetries, sleepBetweenRetries, func() (string, error) {
+		output, err := ssh.CheckPrivateSshConnectionE(t, publicWithIpHost, publicWithoutIpHost, fmt.Sprintf("echo '%s'", echoText))
+		if err != nil {
+			return "", err
+		}
+
+		if strings.TrimSpace(echoText) != strings.TrimSpace(output) {
+			return "", fmt.Errorf("Expected: %s. Got: %s\n", echoText, output)
+		}
+
+		return "", nil
+	})
+
+	// TODO: Add a third jump to terratest to test NAT
 }
