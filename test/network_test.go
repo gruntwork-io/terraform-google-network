@@ -2,6 +2,7 @@ package test
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/gruntwork-io/terratest/modules/gcp"
 	"github.com/gruntwork-io/terratest/modules/retry"
@@ -75,7 +76,12 @@ func TestNetworkManagement(t *testing.T) {
 
 	// Attach the SSH Key to each instances so we can access them at will later
 	for _, v := range []*gcp.Instance{external, publicWithIp, publicWithoutIp} {
-		v.AddSshKey(t, sshUsername, keyPair.PublicKey)
+		// Adding instance metadata uses a shared fingerprint per-project, and it's (slightly) eventually consistent.
+		// This means we'll get an error on mismatch, so we can try a few times and make sure we get it right.
+		retry.DoWithRetry(t, "Adding SSH Key", 20, 1 * time.Second, func() (string, error) {
+			err := v.AddSshKeyE(t, sshUsername, keyPair.PublicKey)
+			return "", err
+		})
 	}
 
 	// "external internet" settings pulled from the instance in the default network
