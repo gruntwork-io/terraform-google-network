@@ -128,14 +128,14 @@ type SSHCheck struct {
 	Check func(t *testing.T)
 }
 
-func testSSHOn1Host(t *testing.T, expectSuccess bool, hosts ...ssh.Host) {
+func testSSHOn1Host(t *testing.T, expectSuccess bool, host ssh.Host) {
 	maxRetries := SSHMaxRetries
 	if !expectSuccess {
 		maxRetries = SSHMaxRetriesExpectError
 	}
 
 	_, err := retry.DoWithRetryE(t, "Attempting to SSH", maxRetries, SSHSleepBetweenRetries, func() (string, error) {
-		output, err := ssh.CheckSshCommandE(t, hosts[0], fmt.Sprintf("echo '%s'", SSHEchoText))
+		output, err := ssh.CheckSshCommandE(t, host, fmt.Sprintf("echo '%s'", SSHEchoText))
 		if err != nil {
 			return "", err
 		}
@@ -156,14 +156,15 @@ func testSSHOn1Host(t *testing.T, expectSuccess bool, hosts ...ssh.Host) {
 	}
 }
 
-func testSSHOn2Hosts(t *testing.T, expectSuccess bool, hosts ...ssh.Host) {
+// TODO: Add a third jump to terratest to test public -> private -> external with NAT
+func testSSHOn2Hosts(t *testing.T, expectSuccess bool, publicHost, secondHost ssh.Host) {
 	maxRetries := SSHMaxRetries
 	if !expectSuccess {
 		maxRetries = SSHMaxRetriesExpectError
 	}
 
 	_, err := retry.DoWithRetryE(t, "Attempting to SSH", maxRetries, SSHSleepBetweenRetries, func() (string, error) {
-		output, err := ssh.CheckPrivateSshConnectionE(t, hosts[0], hosts[1], fmt.Sprintf("echo '%s'", SSHEchoText))
+		output, err := ssh.CheckPrivateSshConnectionE(t, publicHost, secondHost, fmt.Sprintf("echo '%s'", SSHEchoText))
 		if err != nil {
 			return "", err
 		}
