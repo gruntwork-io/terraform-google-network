@@ -3,16 +3,14 @@ package test
 import (
 	"fmt"
 
-	"path/filepath"
-	"strings"
-	"testing"
-	"time"
-
 	"github.com/gruntwork-io/terratest/modules/gcp"
 	"github.com/gruntwork-io/terratest/modules/retry"
 	"github.com/gruntwork-io/terratest/modules/ssh"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/gruntwork-io/terratest/modules/test-structure"
+	"path/filepath"
+	"strings"
+	"testing"
 )
 
 // TODO: Add test stages
@@ -80,11 +78,6 @@ func TestNetworkManagement(t *testing.T) {
 		v.AddSshKey(t, sshUsername, keyPair.PublicKey)
 	}
 
-	// Shared settings for SSH
-	maxRetries := 20
-	sleepBetweenRetries := 3 * time.Second
-	echoText := "Hello World"
-
 	// "external internet" settings pulled from the instance in the default network
 	externalHost := ssh.Host{
 		Hostname:    external.GetPublicIp(t),
@@ -100,7 +93,7 @@ func TestNetworkManagement(t *testing.T) {
 	}
 
 	// The public instance w/ no IP can't be accessed directly but can through a bastion
-	if _, err := publicWithoutIp.GetPublicIpE(t); err != nil {
+	if _, err := publicWithoutIp.GetPublicIpE(t); err == nil {
 		t.Errorf("Found an external IP on %s when it should have had none", publicWithoutIp.Name)
 	}
 
@@ -111,9 +104,10 @@ func TestNetworkManagement(t *testing.T) {
 	}
 
 	sshChecks := []SSHCheck{
-		{"public", func(t *testing.T) { testSSHOnHosts(t, maxRetries, sleepBetweenRetries, echoText, publicWithIpHost)} },
-		{"public to external", func(t *testing.T) { testSSHOnHosts(t, maxRetries, sleepBetweenRetries, echoText, publicWithIpHost, externalHost)} },
-		{"public to private", func(t *testing.T) { testSSHOnHosts(t, maxRetries, sleepBetweenRetries, echoText, publicWithIpHost, publicWithoutIpHost)} },
+		{"public", func(t *testing.T) { testSSHOn1Host(t, ExpectSuccess, publicWithIpHost)} },
+		{"public-no-ip", func(t *testing.T) { testSSHOn1Host(t, ExpectFailure, publicWithoutIpHost)} },
+		{"public to external", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, publicWithIpHost, externalHost)} },
+		{"public to public-no-ip", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, publicWithIpHost, publicWithoutIpHost)} },
 	}
 
 	// We need to run a series of parallel funcs inside a serial func in order to ensure that defer statements are ran after they've all completed
@@ -134,38 +128,58 @@ type SSHCheck struct {
 	Check func(t *testing.T)
 }
 
-func testSSHOnHosts(t *testing.T, maxRetries int, sleepBetweenRetries time.Duration, echoText string, hosts ...ssh.Host) string {
-	// TODO: Add a third jump to terratest to test public -> private -> external with NAT
-	if len(hosts) == 1 {
-		return retry.DoWithRetry(t, "Attempting to SSH", maxRetries, sleepBetweenRetries, func() (string, error) {
-			output, err := ssh.CheckSshCommandE(t, hosts[0], fmt.Sprintf("echo '%s'", echoText))
-			if err != nil {
-				return "", err
-			}
+func testSSHOn1Host(t *testing.T, expectSuccess bool, hosts ...ssh.Host) {
+	maxRetries := SSHMaxRetries
+	if !expectSuccess {
+		maxRetries = SSHMaxRetriesExpectError
+	}
 
-			if strings.TrimSpace(echoText) != strings.TrimSpace(output) {
-				return "", fmt.Errorf("Expected: %s. Got: %s\n", echoText, output)
-			}
+	_, err := retry.DoWithRetryE(t, "Attempting to SSH", maxRetries, SSHSleepBetweenRetries, func() (string, error) {
+		output, err := ssh.CheckSshCommandE(t, hosts[0], fmt.Sprintf("echo '%s'", SSHEchoText))
+		if err != nil {
+			return "", err
+		}
 
-			return "", nil
-		})
-	} else if len(hosts) == 2 {
-		return retry.DoWithRetry(t, "Attempting to SSH", maxRetries, sleepBetweenRetries, func() (string, error) {
-			output, err := ssh.CheckPrivateSshConnectionE(t, hosts[0], hosts[1], fmt.Sprintf("echo '%s'", echoText))
-			if err != nil {
-				return "", err
-			}
+		if strings.TrimSpace(SSHEchoText) != strings.TrimSpace(output) {
+			return "", fmt.Errorf("Expected: %s. Got: %s\n", SSHEchoText, output)
+		}
 
-			if strings.TrimSpace(echoText) != strings.TrimSpace(output) {
-				return "", fmt.Errorf("Expected: %s. Got: %s\n", echoText, output)
-			}
+		return "", nil
+	})
 
-			return "", nil
-		})
-	} else {
-		t.Fatalf("Must supply between 1 - 2 hosts to testSSHOnHosts. Saw %d", len(hosts))
+	if err != nil && expectSuccess {
+		t.Fatalf("Expected success but saw: %s", err)
+	}
 
-		// never hit
-		return ""
+	if err == nil && !expectSuccess {
+		t.Fatalf("Expected an error but saw none.")
+	}
+}
+
+func testSSHOn2Hosts(t *testing.T, expectSuccess bool, hosts ...ssh.Host) {
+	maxRetries := SSHMaxRetries
+	if !expectSuccess {
+		maxRetries = SSHMaxRetriesExpectError
+	}
+
+	_, err := retry.DoWithRetryE(t, "Attempting to SSH", maxRetries, SSHSleepBetweenRetries, func() (string, error) {
+		output, err := ssh.CheckPrivateSshConnectionE(t, hosts[0], hosts[1], fmt.Sprintf("echo '%s'", SSHEchoText))
+		if err != nil {
+			return "", err
+		}
+
+		if strings.TrimSpace(SSHEchoText) != strings.TrimSpace(output) {
+			return "", fmt.Errorf("Expected: %s. Got: %s\n", SSHEchoText, output)
+		}
+
+		return "", nil
+	})
+
+	if err != nil && expectSuccess {
+		t.Fatalf("Expected success but saw: %s", err)
+	}
+
+	if err == nil && !expectSuccess {
+		t.Fatalf("Expected an error but saw none.")
 	}
 }

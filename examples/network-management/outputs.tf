@@ -80,5 +80,5 @@ output "instance_public_with_ip" {
 
 output "instance_public_without_ip" {
   description = "A reference (self link) to the instance tagged as public in a public subnetwork without an internet IP"
-  value       = "${google_compute_instance.public_with_ip.self_link}"
+  value       = "${google_compute_instance.public_without_ip.self_link}"
 }

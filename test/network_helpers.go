@@ -3,9 +3,21 @@ package test
 import (
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/gruntwork-io/terratest/modules/gcp"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+)
+
+var (
+	ExpectSuccess = true
+	ExpectFailure = false
+
+	SSHMaxRetries = 20
+	// we don't want to retry for too long, but we should do it at least a few times to make sure the instance is up
+	SSHMaxRetriesExpectError = 3
+	SSHSleepBetweenRetries = 3 * time.Second
+	SSHEchoText = "Hello World"
 )
 
 // Convenience method to fetch an instance from a reference in the output
