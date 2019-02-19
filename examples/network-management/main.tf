@@ -88,3 +88,63 @@ resource "google_compute_instance" "public_without_ip" {
     subnetwork = "${module.management_network.public_subnetwork}"
   }
 }
+
+resource "google_compute_instance" "private_public" {
+  name         = "${var.instance_name_prefix}-private-public"
+  machine_type = "n1-standard-1"
+  zone         = "${data.google_compute_zones.available.names[0]}"
+
+  allow_stopping_for_update = true
+
+  tags = ["${module.management_network.private}"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-9"
+    }
+  }
+
+  network_interface {
+    subnetwork = "${module.management_network.public_subnetwork}"
+  }
+}
+
+resource "google_compute_instance" "private" {
+  name         = "${var.instance_name_prefix}-private"
+  machine_type = "n1-standard-1"
+  zone         = "${data.google_compute_zones.available.names[0]}"
+
+  allow_stopping_for_update = true
+
+  tags = ["${module.management_network.private}"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-9"
+    }
+  }
+
+  network_interface {
+    subnetwork = "${module.management_network.private_subnetwork}"
+  }
+}
+
+resource "google_compute_instance" "private_persistence" {
+  name         = "${var.instance_name_prefix}-private-persistence"
+  machine_type = "n1-standard-1"
+  zone         = "${data.google_compute_zones.available.names[0]}"
+
+  allow_stopping_for_update = true
+
+  tags = ["${module.management_network.private_persistence}"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-9"
+    }
+  }
+
+  network_interface {
+    subnetwork = "${module.management_network.private_subnetwork}"
+  }
+}

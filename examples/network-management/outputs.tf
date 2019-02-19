@@ -82,3 +82,18 @@ output "instance_public_without_ip" {
   description = "A reference (self link) to the instance tagged as public in a public subnetwork without an internet IP"
   value       = "${google_compute_instance.public_without_ip.self_link}"
 }
+
+output "instance_private_public" {
+  description = "A reference (self link) to the instance tagged as private in a public subnetwork"
+  value       = "${google_compute_instance.private_public.self_link}"
+}
+
+output "instance_private" {
+  description = "A reference (self link) to the instance tagged as private in a private subnetwork"
+  value       = "${google_compute_instance.private.self_link}"
+}
+
+output "instance_private_persistence" {
+  description = "A reference (self link) to the instance tagged as private-persistence in a private subnetwork"
+  value       = "${google_compute_instance.private_persistence.self_link}"
+}
