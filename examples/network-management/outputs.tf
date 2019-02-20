@@ -63,3 +63,37 @@ output "private_persistence" {
   description = "The network tag string used for the private-persistence access tier"
   value       = "${module.management_network.private_persistence}"
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Instance Info (primarily for testing)
+# ---------------------------------------------------------------------------------------------------------------------
+
+output "instance_default_network" {
+  description = "A reference (self link) to an instance in the default network. Note that the default network allows SSH."
+  value       = "${google_compute_instance.default_network.self_link}"
+}
+
+output "instance_public_with_ip" {
+  description = "A reference (self link) to the instance tagged as public in a public subnetwork with an external IP"
+  value       = "${google_compute_instance.public_with_ip.self_link}"
+}
+
+output "instance_public_without_ip" {
+  description = "A reference (self link) to the instance tagged as public in a public subnetwork without an internet IP"
+  value       = "${google_compute_instance.public_without_ip.self_link}"
+}
+
+output "instance_private_public" {
+  description = "A reference (self link) to the instance tagged as private in a public subnetwork"
+  value       = "${google_compute_instance.private_public.self_link}"
+}
+
+output "instance_private" {
+  description = "A reference (self link) to the instance tagged as private in a private subnetwork"
+  value       = "${google_compute_instance.private.self_link}"
+}
+
+output "instance_private_persistence" {
+  description = "A reference (self link) to the instance tagged as private-persistence in a private subnetwork"
+  value       = "${google_compute_instance.private_persistence.self_link}"
+}
