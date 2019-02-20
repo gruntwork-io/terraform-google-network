@@ -76,13 +76,7 @@ resource "google_compute_firewall" "private_allow_restricted_network_inbound" {
   target_tags = ["${local.private_persistence}"]
   direction   = "INGRESS"
 
-  source_ranges = [
-    "${data.google_compute_subnetwork.public_subnetwork.ip_cidr_range}",
-    "${data.google_compute_subnetwork.public_subnetwork.secondary_ip_range.0.ip_cidr_range}",
-    "${data.google_compute_subnetwork.private_subnetwork.ip_cidr_range}",
-    "${data.google_compute_subnetwork.private_subnetwork.secondary_ip_range.0.ip_cidr_range}",
-  ]
-
+  # source_tags is implicitly within this network; tags are only applied to instances that rest within the same network
   source_tags = ["${local.private}", "${local.private_persistence}"]
 
   priority = "1000"
