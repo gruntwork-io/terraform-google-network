@@ -184,13 +184,19 @@ type SSHCheck struct {
 	Check func(t *testing.T)
 }
 
+func doWithRetryAndTimeoutE(t *testing.T, description string, maxRetries int, sshSleepBetweenRetries time.Duration, timeoutPerRetry time.Duration, action func() (string, error)) (string, error) {
+	return retry.DoWithRetryE(t, description, maxRetries, sshSleepBetweenRetries, func() (string, error) {
+		return retry.DoWithTimeoutE(t, description, timeoutPerRetry, action)
+	})
+}
+
 func testSSHOn1Host(t *testing.T, expectSuccess bool, host ssh.Host) {
 	maxRetries := SSHMaxRetries
 	if !expectSuccess {
 		maxRetries = SSHMaxRetriesExpectError
 	}
 
-	_, err := retry.DoWithRetryE(t, "Attempting to SSH", maxRetries, SSHSleepBetweenRetries, func() (string, error) {
+	_, err := doWithRetryAndTimeoutE(t, "Attempting to SSH", maxRetries, SSHSleepBetweenRetries, SSHTimeout, func() (string, error) {
 		output, err := ssh.CheckSshCommandE(t, host, fmt.Sprintf("echo '%s'", SSHEchoText))
 		if err != nil {
 			return "", err
@@ -218,7 +224,7 @@ func testSSHOn2Hosts(t *testing.T, expectSuccess bool, publicHost, secondHost ss
 		maxRetries = SSHMaxRetriesExpectError
 	}
 
-	_, err := retry.DoWithRetryE(t, "Attempting to SSH", maxRetries, SSHSleepBetweenRetries, func() (string, error) {
+	_, err := doWithRetryAndTimeoutE(t, "Attempting to SSH", maxRetries, SSHSleepBetweenRetries, SSHTimeout, func() (string, error) {
 		output, err := ssh.CheckPrivateSshConnectionE(t, publicHost, secondHost, fmt.Sprintf("echo '%s'", SSHEchoText))
 		if err != nil {
 			return "", err
