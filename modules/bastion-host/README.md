@@ -6,7 +6,7 @@ as a bastion host or "jumpbox", allowing access to private instances inside your
 Bastion hosts configured with this module are set up so access to the bastion host is controlled by the user's Google
 identity and the GCP IAM roles it's been granted through [OS Login](https://cloud.google.com/compute/docs/oslogin/). SSH
 keys for individual instances are unable to be managed by the user; instead, GCP manages access through fine-grained,
-revokable IAM roles. OS Login is is the recommended way to manage many users across multiple instances or projects on GCP.
+revokable IAM roles. OS Login is the recommended way to manage many users across multiple instances or projects on GCP.
 
 ## How do I SSH to the host?
 
