@@ -12,6 +12,11 @@ output "public_subnetwork" {
   value       = "${google_compute_subnetwork.vpc_subnetwork_public.self_link}"
 }
 
+output "public_subnetwork_name" {
+  description = "Name of the public subnetwork"
+  value       = "${google_compute_subnetwork.vpc_subnetwork_public.name}"
+}
+
 output "public_subnetwork_cidr_block" {
   value = "${google_compute_subnetwork.vpc_subnetwork_public.ip_cidr_range}"
 }
@@ -30,6 +35,11 @@ output "public_subnetwork_secondary_cidr_block" {
 
 output "private_subnetwork" {
   description = "A reference (self_link) to the private subnetwork"
+  value       = "${google_compute_subnetwork.vpc_subnetwork_private.self_link}"
+}
+
+output "private_subnetwork_name" {
+  description = "Name of the private subnetwork"
   value       = "${google_compute_subnetwork.vpc_subnetwork_private.self_link}"
 }
 
