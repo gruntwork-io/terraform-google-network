@@ -12,7 +12,7 @@ variable "region" {
 }
 
 variable "name" {
-  description = "The prefix for names of network resources"
+  description = "A name prefix to apply to resources"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------

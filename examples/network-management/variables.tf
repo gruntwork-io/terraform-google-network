@@ -17,11 +17,6 @@ variable "region" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "name" {
-  description = "The name of the VPC network."
-  default     = "example-management-network"
-}
-
-variable "instance_name_prefix" {
-  description = "A name prefix to apply to VM instances created as part of this example"
+  description = "A name prefix to apply to resources"
   default     = "management"
 }

@@ -17,6 +17,6 @@ variable "region" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "name" {
-  description = "The name of the VPC network."
-  default     = "example-application-network"
+  description = "A name prefix to apply to resources"
+  default     = "application"
 }

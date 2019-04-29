@@ -17,6 +17,6 @@ variable "second_network" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "name" {
-  description = "A naming format for the network peerings"
+  description = "A name prefix to apply to resources"
   value       = "peering"
 }

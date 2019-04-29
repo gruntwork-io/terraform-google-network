@@ -15,8 +15,7 @@ func createNetworkManagementTerraformOptions(
 	templatePath string,
 ) *terraform.Options {
 	terraformVars := map[string]interface{}{
-		"name": fmt.Sprintf("example-management-network-%s", uniqueId),
-		"instance_name_prefix": fmt.Sprintf("mgmt-%s", uniqueId),
+		"name": fmt.Sprintf("management-%s", uniqueId),
 		"region":  region,
 		"project": project,
 	}

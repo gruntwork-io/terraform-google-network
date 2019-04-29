@@ -48,7 +48,6 @@ resource "google_compute_router_nat" "vpc_nat" {
   router = "${google_compute_router.vpc_router.name}"
   region = "${var.region}"
 
-  #TODO: Manually define NAT IP Pool
   nat_ip_allocate_option = "AUTO_ONLY"
 
   # "Manually" define the subnetworks for which the NAT is used, so that we can exclude the public subnetwork
@@ -87,8 +86,7 @@ resource "google_compute_subnetwork" "vpc_subnetwork_private" {
 module "network_firewall" {
   source = "../network-firewall"
 
-  project = "${var.project}"
-  region  = "${var.region}"
+  name    = "${var.name}"
   network = "${google_compute_network.vpc.self_link}"
 
   public_subnetwork  = "${google_compute_subnetwork.vpc_subnetwork_public.self_link}"

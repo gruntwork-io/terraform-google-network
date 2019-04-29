@@ -27,16 +27,3 @@ Service projects have first-class access to usage of host networks, and can also
 service projects should exclusively use host networks. Billing for resources in a Shared VPC network is generally
 attributed to the service project. See the [service project billing](https://cloud.google.com/vpc/docs/shared-vpc#billing)
 docs for details.
-
-<!-- TODO(rileykarson): Add IAM / project services to provided project or eliminate this section -->
-## What IAM roles does this module configure? (unimplemented)
-
-Given a service account, this module will enable the following IAM roles:
-
-* 
-
-## What services does this module enable on my project? (unimplemented)
-
-This module will ensure the following services are active on your project:
-
-*

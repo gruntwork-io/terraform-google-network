@@ -15,8 +15,7 @@ properly restricted. See [the Access Tier table](/modules/vpc-network#access-tie
 
 #### Supporting Modules
 
-There are also several supporting modules that add extra functionality on top of network-application and
-network-management:
+There are also several supporting modules that add extra functionality on top of `vpc-network`:
 
 * [network-peering](/modules/network-peering): Configure peering connections between your networks, allowing you to
 limit access between environments and reduce the risk of production workloads being compromised.
@@ -24,6 +23,8 @@ limit access between environments and reduce the risk of production workloads be
 * [project-host-configuration](/modules/project-host-configuration): Configure your project to be a "host project" whose
 networks can be shared across multiple projects in the organization as part of a defense-in-depth security strategy, and
 to allow service-level billing across different teams within your organization.
+
+* [network-firewall](/modules/network-firewall): Configures the firewall rules expected by the `vpc-network` module.
 
 <!-- TODO: Document Bastion Host, OpenVPC, Firewall modules -->
 
@@ -37,8 +38,6 @@ connections between your resources and services both on Google Cloud and outside
 
 Networks are global, and a single network can be used for all of your GCP resources across all regions. Subnetworks,
 ranges of IP addresses within a single region, can be used to usefully partition your private network IP space.
-
-<!-- TODO: ## What parts of the Production Grade Infrastructure Checklist are covered by this Module? -->
 
 ## Who maintains this Module?
 
