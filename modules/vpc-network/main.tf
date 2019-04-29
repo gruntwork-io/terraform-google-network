@@ -17,6 +17,8 @@ resource "google_compute_network" "vpc" {
 
 resource "google_compute_router" "vpc_router" {
   name    = "${var.name}-router"
+
+  project = "${var.project}"
   region  = "${var.region}"
   network = "${google_compute_network.vpc.self_link}"
 }
@@ -29,6 +31,8 @@ resource "google_compute_router" "vpc_router" {
 
 resource "google_compute_subnetwork" "vpc_subnetwork_public" {
   name    = "${var.name}-subnetwork-public"
+
+  project = "${var.project}"
   region  = "${var.region}"
   network = "${google_compute_network.vpc.self_link}"
 
@@ -45,8 +49,10 @@ resource "google_compute_subnetwork" "vpc_subnetwork_public" {
 
 resource "google_compute_router_nat" "vpc_nat" {
   name   = "${var.name}-nat"
-  router = "${google_compute_router.vpc_router.name}"
+
+  project = "${var.project}"
   region = "${var.region}"
+  router = "${google_compute_router.vpc_router.name}"
 
   nat_ip_allocate_option = "AUTO_ONLY"
 
@@ -65,6 +71,8 @@ resource "google_compute_router_nat" "vpc_nat" {
 
 resource "google_compute_subnetwork" "vpc_subnetwork_private" {
   name    = "${var.name}-subnetwork-private"
+
+  project = "${var.project}"
   region  = "${var.region}"
   network = "${google_compute_network.vpc.self_link}"
 
@@ -87,6 +95,9 @@ module "network_firewall" {
   source = "../network-firewall"
 
   name    = "${var.name}"
+
+  project = "${var.project}"
+  region  = "${var.region}"
   network = "${google_compute_network.vpc.self_link}"
 
   public_subnetwork  = "${google_compute_subnetwork.vpc_subnetwork_public.self_link}"

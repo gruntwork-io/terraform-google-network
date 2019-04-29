@@ -15,6 +15,10 @@ variable "private_subnetwork" {
   description = "A reference (self_link) to the private subnetwork of the network"
 }
 
+variable "project" {
+  description = "The project to create the firewall rules in. Must match the network project."
+}
+
 variable "name" {
   description = "A name prefix to apply to resources"
 }
