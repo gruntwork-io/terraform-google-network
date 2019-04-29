@@ -16,7 +16,7 @@ variable "second_network" {
 # Generally, these values won't need to be changed.
 # ---------------------------------------------------------------------------------------------------------------------
 
-variable "name" {
-  description = "A name prefix to apply to resources"
+variable "name_prefix" {
+  description = "A name prefix used in resource names to ensure uniqueness across a project."
   value       = "peering"
 }

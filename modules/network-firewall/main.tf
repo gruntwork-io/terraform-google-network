@@ -18,7 +18,7 @@ locals {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_firewall" "public_allow_all_inbound" {
-  name    = "${var.name}-public-allow-ingress"
+  name = "${var.name_prefix}-public-allow-ingress"
 
   project = "${var.project}"
   network = "${var.network}"
@@ -39,7 +39,7 @@ resource "google_compute_firewall" "public_allow_all_inbound" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_firewall" "private_allow_all_network_inbound" {
-  name    = "${var.name}-private-allow-network-inbound"
+  name = "${var.name_prefix}-private-allow-network-inbound"
 
   project = "${var.project}"
   network = "${var.network}"
@@ -66,7 +66,7 @@ resource "google_compute_firewall" "private_allow_all_network_inbound" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_firewall" "private_allow_restricted_network_inbound" {
-  name    = "${var.name}-allow-restricted-inbound"
+  name = "${var.name_prefix}-allow-restricted-inbound"
 
   project = "${var.project}"
   network = "${var.network}"

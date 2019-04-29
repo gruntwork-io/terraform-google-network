@@ -8,7 +8,7 @@ module "management_network" {
   # source = "git::git@github.com:gruntwork-io/terraform-google-network.git//modules/vpc-network?ref=v0.0.1"
   source = "../../modules/vpc-network"
 
-  name    = "${var.name}"
+  name    = "${var.name_prefix}"
   project = "${var.project}"
   region  = "${var.region}"
 }
@@ -24,7 +24,7 @@ data "google_compute_zones" "available" {
 
 // This instance acts as an arbitrary internet address for testing purposes
 resource "google_compute_instance" "default_network" {
-  name         = "${var.name}-default-network"
+  name         = "${var.name_prefix}-default-network"
   machine_type = "n1-standard-1"
   zone         = "${data.google_compute_zones.available.names[0]}"
 
@@ -46,7 +46,7 @@ resource "google_compute_instance" "default_network" {
 }
 
 resource "google_compute_instance" "public_with_ip" {
-  name         = "${var.name}-public-with-ip"
+  name         = "${var.name_prefix}-public-with-ip"
   machine_type = "n1-standard-1"
   zone         = "${data.google_compute_zones.available.names[0]}"
 
@@ -70,7 +70,7 @@ resource "google_compute_instance" "public_with_ip" {
 }
 
 resource "google_compute_instance" "public_without_ip" {
-  name         = "${var.name}-public-without-ip"
+  name         = "${var.name_prefix}-public-without-ip"
   machine_type = "n1-standard-1"
   zone         = "${data.google_compute_zones.available.names[0]}"
 
@@ -90,7 +90,7 @@ resource "google_compute_instance" "public_without_ip" {
 }
 
 resource "google_compute_instance" "private_public" {
-  name         = "${var.name}-private-public"
+  name         = "${var.name_prefix}-private-public"
   machine_type = "n1-standard-1"
   zone         = "${data.google_compute_zones.available.names[0]}"
 
@@ -110,7 +110,7 @@ resource "google_compute_instance" "private_public" {
 }
 
 resource "google_compute_instance" "private" {
-  name         = "${var.name}-private"
+  name         = "${var.name_prefix}-private"
   machine_type = "n1-standard-1"
   zone         = "${data.google_compute_zones.available.names[0]}"
 
@@ -130,7 +130,7 @@ resource "google_compute_instance" "private" {
 }
 
 resource "google_compute_instance" "private_persistence" {
-  name         = "${var.name}-private-persistence"
+  name         = "${var.name_prefix}-private-persistence"
   machine_type = "n1-standard-1"
   zone         = "${data.google_compute_zones.available.names[0]}"
 
