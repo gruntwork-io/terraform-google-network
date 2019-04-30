@@ -19,6 +19,6 @@ variable "project" {
   description = "The project to create the firewall rules in. Must match the network project."
 }
 
-variable "region" {
-  description = "The region of the subnetworks"
+variable "name_prefix" {
+  description = "A name prefix used in resource names to ensure uniqueness across a project."
 }

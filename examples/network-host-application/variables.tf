@@ -16,7 +16,7 @@ variable "region" {
 # These parameters have reasonable defaults.
 # ---------------------------------------------------------------------------------------------------------------------
 
-variable "name" {
-  description = "The name of the VPC network."
-  default     = "example-application-network"
+variable "name_prefix" {
+  description = "A name prefix used in resource names to ensure uniqueness across a project."
+  default     = "application"
 }

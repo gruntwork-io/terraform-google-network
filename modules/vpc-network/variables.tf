@@ -11,8 +11,8 @@ variable "region" {
   description = "The region for subnetworks in the network"
 }
 
-variable "name" {
-  description = "The prefix for names of network resources"
+variable "name_prefix" {
+  description = "A name prefix used in resource names to ensure uniqueness across a project."
 }
 
 # ---------------------------------------------------------------------------------------------------------------------

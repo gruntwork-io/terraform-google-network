@@ -5,7 +5,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_network" "vpc" {
-  name    = "${var.name}-network"
+  name    = "${var.name_prefix}-network"
   project = "${var.project}"
 
   # Always define custom subnetworks- one subnetwork per region isn't useful for an opinionated setup
@@ -16,7 +16,9 @@ resource "google_compute_network" "vpc" {
 }
 
 resource "google_compute_router" "vpc_router" {
-  name    = "${var.name}-router"
+  name = "${var.name_prefix}-router"
+
+  project = "${var.project}"
   region  = "${var.region}"
   network = "${google_compute_network.vpc.self_link}"
 }
@@ -28,7 +30,9 @@ resource "google_compute_router" "vpc_router" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_subnetwork" "vpc_subnetwork_public" {
-  name    = "${var.name}-subnetwork-public"
+  name = "${var.name_prefix}-subnetwork-public"
+
+  project = "${var.project}"
   region  = "${var.region}"
   network = "${google_compute_network.vpc.self_link}"
 
@@ -44,11 +48,12 @@ resource "google_compute_subnetwork" "vpc_subnetwork_public" {
 }
 
 resource "google_compute_router_nat" "vpc_nat" {
-  name   = "${var.name}-nat"
-  router = "${google_compute_router.vpc_router.name}"
-  region = "${var.region}"
+  name = "${var.name_prefix}-nat"
 
-  #TODO: Manually define NAT IP Pool
+  project = "${var.project}"
+  region  = "${var.region}"
+  router  = "${google_compute_router.vpc_router.name}"
+
   nat_ip_allocate_option = "AUTO_ONLY"
 
   # "Manually" define the subnetworks for which the NAT is used, so that we can exclude the public subnetwork
@@ -65,7 +70,9 @@ resource "google_compute_router_nat" "vpc_nat" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_subnetwork" "vpc_subnetwork_private" {
-  name    = "${var.name}-subnetwork-private"
+  name = "${var.name_prefix}-subnetwork-private"
+
+  project = "${var.project}"
   region  = "${var.region}"
   network = "${google_compute_network.vpc.self_link}"
 
@@ -87,8 +94,9 @@ resource "google_compute_subnetwork" "vpc_subnetwork_private" {
 module "network_firewall" {
   source = "../network-firewall"
 
+  name_prefix = "${var.name_prefix}"
+
   project = "${var.project}"
-  region  = "${var.region}"
   network = "${google_compute_network.vpc.self_link}"
 
   public_subnetwork  = "${google_compute_subnetwork.vpc_subnetwork_public.self_link}"

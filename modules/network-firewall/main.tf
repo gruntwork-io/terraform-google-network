@@ -1,20 +1,12 @@
-// Use subnetwork datasources so we can interpolate ranges off of them.
-// TODO: Use self_link directly when https://github.com/GoogleCloudPlatform/magic-modules/pull/1377
-// is merged
 data "google_compute_subnetwork" "public_subnetwork" {
-  name    = "${basename(var.public_subnetwork)}"
-  region  = "${var.region}"
-  project = "${var.project}"
+  self_link = "${var.public_subnetwork}"
 }
 
 data "google_compute_subnetwork" "private_subnetwork" {
-  name    = "${basename(var.public_subnetwork)}"
-  region  = "${var.region}"
-  project = "${var.project}"
+  self_link = "${var.public_subnetwork}"
 }
 
 // Define tags as locals so they can be interpolated off of + exported
-
 locals {
   public              = "public"
   private             = "private"
@@ -26,7 +18,9 @@ locals {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_firewall" "public_allow_all_inbound" {
-  name    = "public-allow-all-inbound"
+  name = "${var.name_prefix}-public-allow-ingress"
+
+  project = "${var.project}"
   network = "${var.network}"
 
   target_tags   = ["${local.public}"]
@@ -45,7 +39,9 @@ resource "google_compute_firewall" "public_allow_all_inbound" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_firewall" "private_allow_all_network_inbound" {
-  name    = "private-allow-all-network-inbound"
+  name = "${var.name_prefix}-private-allow-network-inbound"
+
+  project = "${var.project}"
   network = "${var.network}"
 
   target_tags = ["${local.private}"]
@@ -70,7 +66,9 @@ resource "google_compute_firewall" "private_allow_all_network_inbound" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_firewall" "private_allow_restricted_network_inbound" {
-  name    = "private-allow-restricted-network-inbound"
+  name = "${var.name_prefix}-allow-restricted-inbound"
+
+  project = "${var.project}"
   network = "${var.network}"
 
   target_tags = ["${local.private_persistence}"]
