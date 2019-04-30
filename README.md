@@ -1,34 +1,51 @@
+[![Maintained by Gruntwork.io](https://img.shields.io/badge/maintained%20by-gruntwork.io-%235849a6.svg)](https://gruntwork.io/?ref=repo_google_network)
+
 # Google VPC Network Modules
 
 This repo contains modules for creating [Virtual Private Cloud (VPC) networks](https://cloud.google.com/vpc/docs/vpc) on
 Google Cloud Platform (GCP) following best practices.
 
-#### Main Modules
+## Quickstart
 
-The primary module is:
+If you want to quickly spin up a VPC Network in GCP, you can run the example that is in the root of this repo. Check out
+[network-management example documentation](https://github.com/gruntwork-io/terraform-google-network/blob/master/examples/network-management)
+for instructions.
 
-* [vpc-network](/modules/vpc-network): Launch a secure VPC network on GCP.
+## What's in this repo
 
-Inbound traffic to instances in the network is controlled by "access tiers", a pair of subnetwork and [network `tags`](https://cloud.google.com/vpc/docs/add-remove-network-tags).
-By defining an appropriate subnetwork and tag for an instance, you'll ensure that traffic to and from the instance is
-properly restricted. See [the Access Tier table](/modules/vpc-network#access-tier) for more details.
+This repo has the following folder structure:
 
-#### Supporting Modules
+* [root](https://github.com/gruntwork-io/terraform-google-network/tree/master): The root folder contains an example of how
+  to deploy a service-agnostic "management" VPC network in GCP. See [network-management](https://github.com/gruntwork-io/terraform-google-network/blob/master/examples/network-management)
+  for the documentation.
 
-There are also several supporting modules that add extra functionality on top of `vpc-network`:
+* [modules](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules): This folder contains the
+  main implementation code for this Module, broken down into multiple standalone submodules.
 
-* [network-peering](/modules/network-peering): Configure peering connections between your networks, allowing you to
-limit access between environments and reduce the risk of production workloads being compromised.
+  The primary module is:
 
-* [project-host-configuration](/modules/project-host-configuration): Configure your project to be a "host project" whose
-networks can be shared across multiple projects in the organization as part of a defense-in-depth security strategy, and
-to allow service-level billing across different teams within your organization.
+    * [vpc-network](/modules/vpc-network): Launch a secure VPC network on GCP.
 
-* [network-firewall](/modules/network-firewall): Configures the firewall rules expected by the `vpc-network` module.
+    Inbound traffic to instances in the network is controlled by "access tiers", a pair of subnetwork and [network `tags`](https://cloud.google.com/vpc/docs/add-remove-network-tags).
+    By defining an appropriate subnetwork and tag for an instance, you'll ensure that traffic to and from the instance is
+    properly restricted. See [the Access Tier table](/modules/vpc-network#access-tier) for more details.
 
-<!-- TODO: Document Bastion Host, OpenVPC, Firewall modules -->
+    There are also several supporting modules that add extra functionality on top of `vpc-network`:
 
-Click on each module above to see its documentation. Head over to the [examples folder](/examples) for examples.
+    * [network-peering](/modules/network-peering): Configure peering connections between your networks, allowing you to
+    limit access between environments and reduce the risk of production workloads being compromised.
+
+    * [project-host-configuration](/modules/project-host-configuration): Configure your project to be a "host project" whose
+    networks can be shared across multiple projects in the organization as part of a defense-in-depth security strategy, and
+    to allow service-level billing across different teams within your organization.
+
+    * [network-firewall](/modules/network-firewall): Configures the firewall rules expected by the `vpc-network` module.
+
+* [examples](https://github.com/gruntwork-io/terraform-google-network/tree/master/examples): This folder contains
+  examples of how to use the submodules.
+
+* [test](https://github.com/gruntwork-io/terraform-google-network/tree/master/test): Automated tests for the submodules
+  and examples.
 
 ## What's a VPC?
 
@@ -38,6 +55,18 @@ connections between your resources and services both on Google Cloud and outside
 
 Networks are global, and a single network can be used for all of your GCP resources across all regions. Subnetworks,
 ranges of IP addresses within a single region, can be used to usefully partition your private network IP space.
+
+## What's a Module?
+
+A Module is a canonical, reusable, best-practices definition for how to run a single piece of infrastructure, such
+as a database or server cluster. Each Module is written using a combination of [Terraform](https://www.terraform.io/)
+and scripts (mostly bash) and include automated tests, documentation, and examples. It is maintained both by the open
+source community and companies that provide commercial support.
+
+Instead of figuring out the details of how to run a piece of infrastructure from scratch, you can reuse
+existing code that has been proven in production. And instead of maintaining all that infrastructure code yourself,
+you can leverage the work of the Module community to pick up infrastructure improvements through
+a version number bump.
 
 ## Who maintains this Module?
 
