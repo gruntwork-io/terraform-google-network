@@ -30,11 +30,11 @@ func TestNetworkManagement(t *testing.T) {
 	terraform.InitAndApply(t, terratestOptions)
 
 	/*
-	Test Outputs
+		Test Outputs
 	*/
 	// Guarantee that we see expected values from state
 	var stateValues = []struct {
-		outputKey  string
+		outputKey     string
 		expectedValue string
 
 		// With two string insertion points
@@ -66,7 +66,7 @@ func TestNetworkManagement(t *testing.T) {
 	}
 
 	/*
-	Test SSH
+		Test SSH
 	*/
 	external := FetchFromOutput(t, terratestOptions, project, "instance_default_network")
 	publicWithIp := FetchFromOutput(t, terratestOptions, project, "instance_public_with_ip")
@@ -82,7 +82,7 @@ func TestNetworkManagement(t *testing.T) {
 	for _, v := range []*gcp.Instance{external, publicWithIp, publicWithoutIp, privatePublic, private, privatePersistence} {
 		// Adding instance metadata uses a shared fingerprint per-project, and it's (slightly) eventually consistent.
 		// This means we'll get an error on mismatch, so we can try a few times and make sure we get it right.
-		retry.DoWithRetry(t, "Adding SSH Key", 20, 1 * time.Second, func() (string, error) {
+		retry.DoWithRetry(t, "Adding SSH Key", 20, 1*time.Second, func() (string, error) {
 			err := v.AddSshKeyE(t, sshUsername, keyPair.PublicKey)
 			return "", err
 		})
@@ -148,20 +148,20 @@ func TestNetworkManagement(t *testing.T) {
 
 	sshChecks := []SSHCheck{
 		// Success
-		{"public", func(t *testing.T) { testSSHOn1Host(t, ExpectSuccess, publicWithIpHost)} },
-		{"public to external", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, publicWithIpHost, externalHost)} },
-		{"public to public-no-ip", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, publicWithIpHost, publicWithoutIpHost)} },
-		{"public to private-public", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, publicWithIpHost, privatePublicHost)} },
-		{"public to private", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, publicWithIpHost, privateHost)} },
+		{"public", func(t *testing.T) { testSSHOn1Host(t, ExpectSuccess, publicWithIpHost) }},
+		{"public to external", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, publicWithIpHost, externalHost) }},
+		{"public to public-no-ip", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, publicWithIpHost, publicWithoutIpHost) }},
+		{"public to private-public", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, publicWithIpHost, privatePublicHost) }},
+		{"public to private", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, publicWithIpHost, privateHost) }},
 		// TODO: Add a third jump to terratest to test the following:
 		// {"public to privatePublic to external", func(t *testing.T) { testSSHOn3Hosts(t, ExpectSuccess, publicWithIpHost, privatePublicHost, externalHost)} },
 		// {"public to private to private-persistence", func(t *testing.T) { testSSHOn3Hosts(t, ExpectSuccess, publicWithIpHost, privateHost, privatePersistenceHost)} },
 
 		// Failure
-		{"public-no-ip", func(t *testing.T) { testSSHOn1Host(t, ExpectFailure, publicWithoutIpHost)} },
-		{"private-public", func(t *testing.T) { testSSHOn1Host(t, ExpectFailure, privatePublicHost)} },
-		{"private", func(t *testing.T) { testSSHOn1Host(t, ExpectFailure, privateHost)} },
-		{"public to private-persistence", func(t *testing.T) { testSSHOn2Hosts(t, ExpectFailure, publicWithIpHost, privatePersistenceHost)} },
+		{"public-no-ip", func(t *testing.T) { testSSHOn1Host(t, ExpectFailure, publicWithoutIpHost) }},
+		{"private-public", func(t *testing.T) { testSSHOn1Host(t, ExpectFailure, privatePublicHost) }},
+		{"private", func(t *testing.T) { testSSHOn1Host(t, ExpectFailure, privateHost) }},
+		{"public to private-persistence", func(t *testing.T) { testSSHOn2Hosts(t, ExpectFailure, publicWithIpHost, privatePersistenceHost) }},
 		// TODO: Add a third jump to terratest to test the following:
 		// {"public to private to external", func(t *testing.T) { testSSHOn3Hosts(t, ExpectFailure, publicWithIpHost, privateHost, externalHost)} },
 	}
