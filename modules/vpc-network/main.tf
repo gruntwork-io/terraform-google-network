@@ -94,10 +94,9 @@ resource "google_compute_subnetwork" "vpc_subnetwork_private" {
 module "network_firewall" {
   source = "../network-firewall"
 
-  name = "${var.name_prefix}"
+  name_prefix = "${var.name_prefix}"
 
   project = "${var.project}"
-  region  = "${var.region}"
   network = "${google_compute_network.vpc.self_link}"
 
   public_subnetwork  = "${google_compute_subnetwork.vpc_subnetwork_public.self_link}"

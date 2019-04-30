@@ -8,9 +8,9 @@ module "management_network" {
   # source = "git::git@github.com:gruntwork-io/terraform-google-network.git//modules/vpc-network?ref=v0.0.1"
   source = "../../modules/vpc-network"
 
-  name    = "${var.name_prefix}"
-  project = "${var.project}"
-  region  = "${var.region}"
+  name_prefix = "${var.name_prefix}"
+  project     = "${var.project}"
+  region      = "${var.region}"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
