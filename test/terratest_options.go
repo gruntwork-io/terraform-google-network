@@ -15,9 +15,9 @@ func createNetworkManagementTerraformOptions(
 	templatePath string,
 ) *terraform.Options {
 	terraformVars := map[string]interface{}{
-		"name": fmt.Sprintf("management-%s", uniqueId),
-		"region":  region,
-		"project": project,
+		"name_prefix": fmt.Sprintf("management-%s", uniqueId),
+		"region":      region,
+		"project":     project,
 	}
 
 	terratestOptions := terraform.Options{
@@ -28,4 +28,3 @@ func createNetworkManagementTerraformOptions(
 	return &terratestOptions
 
 }
-

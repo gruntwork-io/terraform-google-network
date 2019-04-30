@@ -104,15 +104,3 @@ with attached service projects, and "Management" networks should be used with se
 
 In order to allow any inter-network communication, instances *must* be tagged with one of `public`, `private`, or
 `private-persistence`. See the [network-firewall](../network-firewall) submodule for more details.
-
-## What IAM roles does this module configure? (unimplemented)
-
-Given a service account, this module will enable the following IAM roles:
-
-* 
-
-## What services does this module enable on my project? (unimplemented)
-
-This module will ensure the following services are active on your project:
-
-*

@@ -16,9 +16,9 @@ var (
 	SSHMaxRetries = 10
 	// we don't want to retry for too long, but we should do it at least a few times to make sure the instance is up
 	SSHMaxRetriesExpectError = 3
-	SSHSleepBetweenRetries = 3 * time.Second
-	SSHTimeout = 15 * time.Second
-	SSHEchoText = "Hello World"
+	SSHSleepBetweenRetries   = 3 * time.Second
+	SSHTimeout               = 15 * time.Second
+	SSHEchoText              = "Hello World"
 )
 
 // Convenience method to fetch an instance from a reference in the output
