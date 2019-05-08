@@ -24,22 +24,28 @@ This repo has the following folder structure:
 
   The primary module is:
 
-    * [vpc-network](/modules/vpc-network): Launch a secure VPC network on GCP.
+    * [vpc-network](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/vpc-network): Launch a
+    secure VPC network on GCP.
 
-    Inbound traffic to instances in the network is controlled by "access tiers", a pair of subnetwork and [network `tags`](https://cloud.google.com/vpc/docs/add-remove-network-tags).
-    By defining an appropriate subnetwork and tag for an instance, you'll ensure that traffic to and from the instance is
-    properly restricted. See [the Access Tier table](/modules/vpc-network#access-tier) for more details.
+    Inbound traffic to instances in the network is controlled by "access tiers", a pair of subnetwork and
+    [network `tags`](https://cloud.google.com/vpc/docs/add-remove-network-tags). By defining an appropriate subnetwork
+    and tag for an instance, you'll ensure that traffic to and from the instance is properly restricted. See
+    [the Access Tier table](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/vpc-network#access-tier)
+    for more details.
 
     There are also several supporting modules that add extra functionality on top of `vpc-network`:
 
-    * [network-peering](/modules/network-peering): Configure peering connections between your networks, allowing you to
-    limit access between environments and reduce the risk of production workloads being compromised.
+    * [network-peering](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/network-peering):
+    Configure peering connections between your networks, allowing you to limit access between environments and reduce
+    the risk of production workloads being compromised.
 
-    * [project-host-configuration](/modules/project-host-configuration): Configure your project to be a "host project" whose
-    networks can be shared across multiple projects in the organization as part of a defense-in-depth security strategy, and
-    to allow service-level billing across different teams within your organization.
+    * [project-host-configuration](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/project-host-configuration):
+    Configure your project to be a "host project" whose networks can be shared across multiple projects in the
+    organization as part of a defense-in-depth security strategy, and to allow service-level billing across different
+    teams within your organization.
 
-    * [network-firewall](/modules/network-firewall): Configures the firewall rules expected by the `vpc-network` module.
+    * [network-firewall](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/network-firewall):
+    Configures the firewall rules expected by the `vpc-network` module.
 
 * [examples](https://github.com/gruntwork-io/terraform-google-network/tree/master/examples): This folder contains
   examples of how to use the submodules.
@@ -85,13 +91,14 @@ Gruntwork can help with:
 
 ## How do I contribute to this Module?
 
-Contributions are very welcome! Check out the [Contribution Guidelines](/CONTRIBUTING.md) for instructions.
+Contributions are very welcome! Check out the [Contribution Guidelines](https://github.com/gruntwork-io/terraform-google-network/blob/master/CONTRIBUTING.md)
+for instructions.
 
 
 ## How is this Module versioned?
 
 This Module follows the principles of [Semantic Versioning](http://semver.org/). You can find each new release, along
-with the changelog, in the [Releases Page](../../releases).
+with the changelog, in the [Releases Page](https://github.com/gruntwork-io/terraform-google-network/releases).
 
 During initial development, the major version will be 0 (e.g., `0.x.y`), which indicates the code does not yet have a
 stable API. Once we hit `1.0.0`, we will make every effort to maintain a backwards compatible API and use the MAJOR,
@@ -100,6 +107,7 @@ MINOR, and PATCH versions on each release to indicate any incompatibilities.
 
 ## License
 
-Please see [LICENSE](/LICENSE) for how the code in this repo is licensed.
+Please see [LICENSE](https://github.com/gruntwork-io/terraform-google-network/blob/master/LICENSE) for how the code in
+this repo is licensed.
 
 Copyright &copy; 2019 Gruntwork, Inc.
