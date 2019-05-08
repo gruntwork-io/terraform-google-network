@@ -14,7 +14,7 @@ host project.
 on using Terraform modules.
 * See the [examples](https://github.com/gruntwork-io/terraform-google-network/tree/master/examples) folder for example
 usage.
-* See [variables.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/variables.tf) for all the
-variables you can set on this module.
-* See [outputs.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/outputs.tf) for all the
-variables that are outputed by this module.
+* See [variables.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/modules/network-peering/variables.tf)
+for all the variables you can set on this module.
+* See [outputs.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/modules/network-peering/outputs.tf)
+for all the variables that are outputted by this module.

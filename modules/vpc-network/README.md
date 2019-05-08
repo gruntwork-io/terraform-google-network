@@ -9,22 +9,28 @@ When configuring networks for your organisation, you should generally define the
 application networks. This network should run in the same project as its services.
 
 * `application`- a network per environment (`staging`, `production`, etc.), running multiple services owned by multiple
-teams. Most application networks should be [host projects](../project-host-configuration), allowing you to share a
-single network across multiple "service" projects that each contain a single application or service. See [host project](../project-host-configuration)
+teams. Most application networks should be [host projects](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/project-host-configuration),
+allowing you to share a single network across multiple "service" projects that each contain a single application or
+service. See [host project](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/project-host-configuration)
 for more details.
 
-For more details on specific configuration of each type, see the [examples](../examples) provided in this module.
+For more details on specific configuration of each type, see the [examples](https://github.com/gruntwork-io/terraform-google-network/tree/master/examples)
+provided in this module.
 
 ## How do you use this module?
 
-* See the [root README](/README.md) for instructions on using Terraform modules.
-* See the [examples](/examples) folder for example usage.
-* See [variables.tf](./variables.tf) for all the variables you can set on this module.
-* See [outputs.tf](./outputs.tf) for all the variables that are outputed by this module.
+* See the [root README](https://github.com/gruntwork-io/terraform-google-network/blob/master/README.md) for instructions
+on using Terraform modules.
+* See the [examples](https://github.com/gruntwork-io/terraform-google-network/tree/master/examples) folder for example
+usage.
+* See [variables.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/modules/vpc-network/variables.tf)
+for all the variables you can set on this module.
+* See [outputs.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/modules/vpc-network/outputs.tf)
+for all the variables that are outputted by this module.
 
 ## What is a VPC network?
 
-See [the repo's root README](../../README.md) to learn more about VPC networks.
+See [the repo's root README](https://github.com/gruntwork-io/terraform-google-network/blob/master/README.md) to learn more about VPC networks.
 
 ## Access Tier
 
@@ -42,7 +48,8 @@ reach them. All other inbound traffic is denied, including internal traffic;
 * `private-persistence` - allow inbound traffic from tagged sources within this network, excluding instances tagged
 `public`
 
-See the [network-firewall](../network-firewall) submodule for more details.
+See the [network-firewall](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/network-firewall)
+submodule for more details.
 
 A VPC network defines two subnetworks instances can reside in;
 
@@ -103,4 +110,5 @@ with attached service projects, and "Management" networks should be used with se
 ## Gotchas
 
 In order to allow any inter-network communication, instances *must* be tagged with one of `public`, `private`, or
-`private-persistence`. See the [network-firewall](../network-firewall) submodule for more details.
+`private-persistence`. See the [network-firewall](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/network-firewall)
+submodule for more details.

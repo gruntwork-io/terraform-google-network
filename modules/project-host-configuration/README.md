@@ -9,10 +9,10 @@ whose networks are "host" networks, able to be shared across multiple service pr
 on using Terraform modules.
 * See the [examples](https://github.com/gruntwork-io/terraform-google-network/tree/master/examples) folder for example
 usage.
-* See [variables.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/variables.tf) for all the
-variables you can set on this module.
-* See [outputs.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/outputs.tf) for all the
-variables that are outputed by this module.
+* See [variables.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/modules/project-host-configuration/variables.tf)
+for all the variables you can set on this module.
+* See [outputs.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/modules/project-host-configuration/outputs.tf)
+for all the variables that are outputted by this module.
 
 ## How is a "host" network different than a normal network?
 A host network is a [Shared VPC](https://cloud.google.com/vpc/docs/shared-vpc) concept; shared VPC is a feature that
