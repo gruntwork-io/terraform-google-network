@@ -1,5 +1,5 @@
 [![Maintained by Gruntwork.io](https://img.shields.io/badge/maintained%20by-gruntwork.io-%235849a6.svg)](https://gruntwork.io/?ref=repo_google_network)
-[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/gruntwork-io/terraform-google-network.svg?label=latest)](github.com/gruntwork-io/terraform-google-network/releases/latest)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/gruntwork-io/terraform-google-network.svg?label=latest)](https://github.com/gruntwork-io/terraform-google-network/releases/latest)
 
 # Google VPC Network Modules
 
