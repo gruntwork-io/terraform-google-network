@@ -35,7 +35,7 @@ for a full reference.
 
 ## Can I configure access for users outside of my organization?
 
-Provided a user has a Google identity- such as a GCP account, or an `@gmail.com` email- you can
+Provided a user has a Google identity - such as a GCP account or a `@gmail.com` email, you can
 [configure access for external users](https://cloud.google.com/compute/docs/instances/managing-instance-access#external_user)
 using the IAM role `roles/compute.osLoginExternalUser`
 
