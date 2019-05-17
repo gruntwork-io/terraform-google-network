@@ -3,7 +3,7 @@
 # These variables are expected to be passed in by the operator
 # ---------------------------------------------------------------------------------------------------------------------
 
-variable "instance" {
+variable "instance_name" {
   description = "The name of the VM instance"
 }
 
@@ -31,5 +31,5 @@ variable "tag" {
 
 variable "machine_type" {
   description = "The machine type of the instance."
-  default     = "n1-standard-1"
+  default     = "f1-micro"
 }
