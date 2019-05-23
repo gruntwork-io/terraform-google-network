@@ -28,3 +28,27 @@ func createNetworkManagementTerraformOptions(
 	return &terratestOptions
 
 }
+
+func createBastionHostTerraformOptions(
+	t *testing.T,
+	uniqueId string,
+	project string,
+	region string,
+	zone string,
+	templatePath string,
+) *terraform.Options {
+	terraformVars := map[string]interface{}{
+		"name_prefix": fmt.Sprintf("bastion-%s", uniqueId),
+		"region":      region,
+		"zone":        zone,
+		"project":     project,
+	}
+
+	terratestOptions := terraform.Options{
+		TerraformDir: templatePath,
+		Vars:         terraformVars,
+	}
+
+	return &terratestOptions
+
+}
