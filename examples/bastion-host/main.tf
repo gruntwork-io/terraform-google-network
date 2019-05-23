@@ -41,7 +41,6 @@ resource "google_compute_instance" "private" {
     subnetwork = "${module.management_network.private_subnetwork}"
   }
 
-
   metadata = {
     enable-oslogin = "TRUE"
   }

@@ -3,7 +3,7 @@ resource "google_compute_instance" "bastion_host" {
   machine_type = "${var.machine_type}"
   zone         = "${var.zone}"
 
-  tags = [ "${var.tag}" ]
+  tags = ["${var.tag}"]
 
   boot_disk {
     initialize_params {
