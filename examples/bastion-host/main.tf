@@ -1,3 +1,7 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# Create a Management Network for shared services
+# ---------------------------------------------------------------------------------------------------------------------
+
 module "management_network" {
   # When using these modules in your own templates, you will need to use a Git URL with a ref attribute that pins you
   # to a specific version of the modules, such as the following example:
@@ -9,10 +13,14 @@ module "management_network" {
   region      = "${var.region}"
 }
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Create the bastion host to access private instances
+# ---------------------------------------------------------------------------------------------------------------------
+
 module "bastion_host" {
   # When using these modules in your own templates, you will need to use a Git URL with a ref attribute that pins you
   # to a specific version of the modules, such as the following example:
-  # source = "git::git@github.com:gruntwork-io/terraform-google-network.git//modules/bastion-host?ref=v0.1.1"
+  # source = "git::git@github.com:gruntwork-io/terraform-google-network.git//modules/bastion-host?ref=v0.1.2"
   source = "../../modules/bastion-host"
 
   instance_name = "${var.name_prefix}-vm"
@@ -21,6 +29,10 @@ module "bastion_host" {
   project = "${var.project}"
   zone    = "${var.zone}"
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Create a private instance to use alongside the bastion host.
+# ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_instance" "private" {
   name         = "${var.name_prefix}-private"

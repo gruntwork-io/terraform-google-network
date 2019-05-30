@@ -1,3 +1,7 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# Create an instance with OS Login configured to use as a bastion host.
+# ---------------------------------------------------------------------------------------------------------------------
+
 resource "google_compute_instance" "bastion_host" {
   name         = "${var.instance_name}"
   machine_type = "${var.machine_type}"
