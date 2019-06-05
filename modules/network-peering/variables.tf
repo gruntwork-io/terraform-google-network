@@ -18,5 +18,6 @@ variable "second_network" {
 
 variable "name_prefix" {
   description = "A name prefix used in resource names to ensure uniqueness across a project."
-  value       = "peering"
+  default     = "peering"
 }
+
