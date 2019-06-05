@@ -38,3 +38,4 @@ variable "source_image" {
   description = "The source image to build the VM using. Specified by path reference or by {{project}}/{{image-family}}"
   default     = "gce-uefi-images/ubuntu-1804-lts"
 }
+
