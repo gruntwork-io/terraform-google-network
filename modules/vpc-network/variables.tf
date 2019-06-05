@@ -27,12 +27,12 @@ variable "cidr_block" {
 
 variable "cidr_subnetwork_width_delta" {
   description = "The difference between your network and subnetwork netmask; an /16 network and a /20 subnetwork would be 4."
-  default     = "4"
+  default     = 4
 }
 
 variable "cidr_subnetwork_spacing" {
   description = "How many subnetwork-mask sized spaces to leave between each subnetwork type."
-  default     = "0"
+  default     = 0
 }
 
 variable "secondary_cidr_block" {
@@ -42,15 +42,16 @@ variable "secondary_cidr_block" {
 
 variable "secondary_cidr_subnetwork_width_delta" {
   description = "The difference between your network and subnetwork's secondary range netmask; an /16 network and a /20 subnetwork would be 4."
-  default     = "4"
+  default     = 4
 }
 
 variable "secondary_cidr_subnetwork_spacing" {
   description = "How many subnetwork-mask sized spaces to leave between each subnetwork type's secondary ranges."
-  default     = "0"
+  default     = 0
 }
 
 variable "enable_flow_logging" {
   description = "Whether to enable VPC Flow Logs being sent to Stackdriver (https://cloud.google.com/vpc/docs/using-flow-logs)"
-  default     = "true"
+  default     = true
 }
+
