@@ -39,7 +39,7 @@ resource "google_compute_firewall" "public_allow_all_inbound" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_firewall" "private_allow_all_network_inbound" {
-  name = "${var.name_prefix}-private-allow-network-inbound"
+  name = "${var.name_prefix}-private-allow-ingress"
 
   project = "${var.project}"
   network = "${var.network}"
