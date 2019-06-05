@@ -1,6 +1,6 @@
 output "network" {
   description = "A reference (self_link) to the VPC network"
-  value       = "${module.application_network.network}"
+  value       = module.application_network.network
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -9,19 +9,19 @@ output "network" {
 
 output "public_subnetwork" {
   description = "A reference (self_link) to the public subnetwork"
-  value       = "${module.application_network.public_subnetwork}"
+  value       = module.application_network.public_subnetwork
 }
 
 output "public_subnetwork_cidr_block" {
-  value = "${module.application_network.public_subnetwork_cidr_block}"
+  value = module.application_network.public_subnetwork_cidr_block
 }
 
 output "public_subnetwork_gateway" {
-  value = "${module.application_network.public_subnetwork_gateway}"
+  value = module.application_network.public_subnetwork_gateway
 }
 
 output "public_subnetwork_secondary_cidr_block" {
-  value = "${module.application_network.public_subnetwork_secondary_cidr_block}"
+  value = module.application_network.public_subnetwork_secondary_cidr_block
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -30,19 +30,19 @@ output "public_subnetwork_secondary_cidr_block" {
 
 output "private_subnetwork" {
   description = "A reference (self_link) to the private subnetwork"
-  value       = "${module.application_network.private_subnetwork}"
+  value       = module.application_network.private_subnetwork
 }
 
 output "private_subnetwork_cidr_block" {
-  value = "${module.application_network.private_subnetwork_cidr_block}"
+  value = module.application_network.private_subnetwork_cidr_block
 }
 
 output "private_subnetwork_gateway" {
-  value = "${module.application_network.private_subnetwork_gateway}"
+  value = module.application_network.private_subnetwork_gateway
 }
 
 output "private_subnetwork_secondary_cidr_block" {
-  value = "${module.application_network.private_subnetwork_secondary_cidr_block}"
+  value = module.application_network.private_subnetwork_secondary_cidr_block
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -51,15 +51,16 @@ output "private_subnetwork_secondary_cidr_block" {
 
 output "public" {
   description = "The network tag string used for the public access tier"
-  value       = "${module.application_network.public}"
+  value       = module.application_network.public
 }
 
 output "private" {
   description = "The network tag string used for the private access tier"
-  value       = "${module.application_network.private}"
+  value       = module.application_network.private
 }
 
 output "private_persistence" {
   description = "The network tag string used for the private-persistence access tier"
-  value       = "${module.application_network.private_persistence}"
+  value       = module.application_network.private_persistence
 }
+
