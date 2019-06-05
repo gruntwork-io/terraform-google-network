@@ -22,3 +22,4 @@ variable "project" {
 variable "name_prefix" {
   description = "A name prefix used in resource names to ensure uniqueness across a project."
 }
+
