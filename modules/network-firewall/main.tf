@@ -59,6 +59,10 @@ resource "google_compute_firewall" "private_allow_all_network_inbound" {
   allow {
     protocol = "all"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
