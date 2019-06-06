@@ -32,6 +32,11 @@ resource "google_compute_firewall" "public_allow_all_inbound" {
   allow {
     protocol = "all"
   }
+
+  # Ensure the firewalls are created first before they are destroyed in the event of a parameter change.
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -60,6 +65,7 @@ resource "google_compute_firewall" "private_allow_all_network_inbound" {
     protocol = "all"
   }
 
+  # Ensure the firewalls are created first before they are destroyed in the event of a parameter change.
   lifecycle {
     create_before_destroy = true
   }
@@ -85,5 +91,10 @@ resource "google_compute_firewall" "private_allow_restricted_network_inbound" {
 
   allow {
     protocol = "all"
+  }
+
+  # Ensure the firewalls are created first before they are destroyed in the event of a parameter change.
+  lifecycle {
+    create_before_destroy = true
   }
 }
