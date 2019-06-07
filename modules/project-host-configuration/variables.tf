@@ -5,5 +5,5 @@
 
 variable "project" {
   description = "The project ID for the project to enable as a host project"
+  type        = "string"
 }
-
