@@ -5,17 +5,17 @@
 
 variable "project" {
   description = "The name of the GCP Project where all resources will be launched."
-  type        = "string"
+  type        = string
 }
 
 variable "region" {
   description = "The region in which the VPC netowrk's subnetwork will be created."
-  type        = "string"
+  type        = string
 }
 
 variable "zone" {
   description = "The zone in which the bastion host VM instance will be launched. Must be within the region."
-  type        = "string"
+  type        = string
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ variable "zone" {
 
 variable "name_prefix" {
   description = "A name prefix used in resource names to ensure uniqueness across a project."
-  type        = "string"
+  type        = string
   default     = "bastion"
 }
 
