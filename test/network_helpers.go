@@ -9,6 +9,8 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
+const KEY_PROJECT = "project"
+
 var (
 	ExpectSuccess = true
 	ExpectFailure = false
@@ -32,4 +34,9 @@ func FetchFromOutput(t *testing.T, options *terraform.Options, project, key stri
 func GetResourceNameFromSelfLink(link string) string {
 	parts := strings.Split(link, "/")
 	return parts[len(parts)-1]
+}
+
+func getRandomRegion(t *testing.T, projectID string) string {
+	approvedRegions := []string{"europe-north1", "europe-west1", "europe-west2", "europe-west3", "us-central1", "us-east1", "us-west1"}
+	return gcp.GetRandomRegion(t, projectID, approvedRegions, []string{})
 }

@@ -1,3 +1,9 @@
+terraform {
+  # The modules used in this example have been updated with 0.12 syntax, which means the example is no longer
+  # compatible with any versions below 0.12.
+  required_version = ">= 0.12"
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Create a Management Network for shared services
 # ---------------------------------------------------------------------------------------------------------------------
@@ -8,9 +14,9 @@ module "management_network" {
   # source = "github.com/gruntwork-io/terraform-google-network.git//modules/vpc-network?ref=v0.1.2"
   source = "../../modules/vpc-network"
 
-  name_prefix = "${var.name_prefix}"
-  project     = "${var.project}"
-  region      = "${var.region}"
+  name_prefix = var.name_prefix
+  project     = var.project
+  region      = var.region
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -24,10 +30,10 @@ module "bastion_host" {
   source = "../../modules/bastion-host"
 
   instance_name = "${var.name_prefix}-vm"
-  subnetwork    = "${module.management_network.public_subnetwork}"
+  subnetwork    = module.management_network.public_subnetwork
 
-  project = "${var.project}"
-  zone    = "${var.zone}"
+  project = var.project
+  zone    = var.zone
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -37,11 +43,11 @@ module "bastion_host" {
 resource "google_compute_instance" "private" {
   name         = "${var.name_prefix}-private"
   machine_type = "n1-standard-1"
-  zone         = "${var.zone}"
+  zone         = var.zone
 
   allow_stopping_for_update = true
 
-  tags = ["${module.management_network.private}"]
+  tags = [module.management_network.private]
 
   boot_disk {
     initialize_params {
@@ -50,10 +56,11 @@ resource "google_compute_instance" "private" {
   }
 
   network_interface {
-    subnetwork = "${module.management_network.private_subnetwork}"
+    subnetwork = module.management_network.private_subnetwork
   }
 
   metadata = {
     enable-oslogin = "TRUE"
   }
 }
+

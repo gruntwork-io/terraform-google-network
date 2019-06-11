@@ -1,9 +1,14 @@
+terraform {
+  # This module has been updated with 0.12 syntax, which means it is no longer compatible with any versions below 0.12.
+  required_version = ">= 0.12"
+}
+
 data "google_compute_subnetwork" "public_subnetwork" {
-  self_link = "${var.public_subnetwork}"
+  self_link = var.public_subnetwork
 }
 
 data "google_compute_subnetwork" "private_subnetwork" {
-  self_link = "${var.public_subnetwork}"
+  self_link = var.public_subnetwork
 }
 
 // Define tags as locals so they can be interpolated off of + exported
@@ -20,10 +25,10 @@ locals {
 resource "google_compute_firewall" "public_allow_all_inbound" {
   name = "${var.name_prefix}-public-allow-ingress"
 
-  project = "${var.project}"
-  network = "${var.network}"
+  project = var.project
+  network = var.network
 
-  target_tags   = ["${local.public}"]
+  target_tags   = [local.public]
   direction     = "INGRESS"
   source_ranges = ["0.0.0.0/0"]
 
@@ -41,17 +46,17 @@ resource "google_compute_firewall" "public_allow_all_inbound" {
 resource "google_compute_firewall" "private_allow_all_network_inbound" {
   name = "${var.name_prefix}-private-allow-ingress"
 
-  project = "${var.project}"
-  network = "${var.network}"
+  project = var.project
+  network = var.network
 
-  target_tags = ["${local.private}"]
+  target_tags = [local.private]
   direction   = "INGRESS"
 
   source_ranges = [
-    "${data.google_compute_subnetwork.public_subnetwork.ip_cidr_range}",
-    "${data.google_compute_subnetwork.public_subnetwork.secondary_ip_range.0.ip_cidr_range}",
-    "${data.google_compute_subnetwork.private_subnetwork.ip_cidr_range}",
-    "${data.google_compute_subnetwork.private_subnetwork.secondary_ip_range.0.ip_cidr_range}",
+    data.google_compute_subnetwork.public_subnetwork.ip_cidr_range,
+    data.google_compute_subnetwork.public_subnetwork.secondary_ip_range[0].ip_cidr_range,
+    data.google_compute_subnetwork.private_subnetwork.ip_cidr_range,
+    data.google_compute_subnetwork.private_subnetwork.secondary_ip_range[0].ip_cidr_range,
   ]
 
   priority = "1000"
@@ -68,14 +73,14 @@ resource "google_compute_firewall" "private_allow_all_network_inbound" {
 resource "google_compute_firewall" "private_allow_restricted_network_inbound" {
   name = "${var.name_prefix}-allow-restricted-inbound"
 
-  project = "${var.project}"
-  network = "${var.network}"
+  project = var.project
+  network = var.network
 
-  target_tags = ["${local.private_persistence}"]
+  target_tags = [local.private_persistence]
   direction   = "INGRESS"
 
   # source_tags is implicitly within this network; tags are only applied to instances that rest within the same network
-  source_tags = ["${local.private}", "${local.private_persistence}"]
+  source_tags = [local.private, local.private_persistence]
 
   priority = "1000"
 
@@ -83,3 +88,4 @@ resource "google_compute_firewall" "private_allow_restricted_network_inbound" {
     protocol = "all"
   }
 }
+

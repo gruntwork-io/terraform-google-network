@@ -1,3 +1,9 @@
+terraform {
+  # The modules used in this example have been updated with 0.12 syntax, which means the example is no longer
+  # compatible with any versions below 0.12.
+  required_version = ">= 0.12"
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Create a Management Network for shared services
 # ---------------------------------------------------------------------------------------------------------------------
@@ -8,9 +14,9 @@ module "management_network" {
   # source = "github.com/gruntwork-io/terraform-google-network.git//modules/vpc-network?ref=v0.1.2"
   source = "../../modules/vpc-network"
 
-  name_prefix = "${var.name_prefix}"
-  project     = "${var.project}"
-  region      = "${var.region}"
+  name_prefix = var.name_prefix
+  project     = var.project
+  region      = var.region
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -18,15 +24,15 @@ module "management_network" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 data "google_compute_zones" "available" {
-  project = "${var.project}"
-  region  = "${var.region}"
+  project = var.project
+  region  = var.region
 }
 
 // This instance acts as an arbitrary internet address for testing purposes
 resource "google_compute_instance" "default_network" {
   name         = "${var.name_prefix}-default-network"
   machine_type = "n1-standard-1"
-  zone         = "${data.google_compute_zones.available.names[0]}"
+  zone         = data.google_compute_zones.available.names[0]
 
   allow_stopping_for_update = true
 
@@ -48,11 +54,11 @@ resource "google_compute_instance" "default_network" {
 resource "google_compute_instance" "public_with_ip" {
   name         = "${var.name_prefix}-public-with-ip"
   machine_type = "n1-standard-1"
-  zone         = "${data.google_compute_zones.available.names[0]}"
+  zone         = data.google_compute_zones.available.names[0]
 
   allow_stopping_for_update = true
 
-  tags = ["${module.management_network.public}"]
+  tags = [module.management_network.public]
 
   boot_disk {
     initialize_params {
@@ -61,7 +67,7 @@ resource "google_compute_instance" "public_with_ip" {
   }
 
   network_interface {
-    subnetwork = "${module.management_network.public_subnetwork}"
+    subnetwork = module.management_network.public_subnetwork
 
     access_config {
       // Ephemeral IP
@@ -72,11 +78,11 @@ resource "google_compute_instance" "public_with_ip" {
 resource "google_compute_instance" "public_without_ip" {
   name         = "${var.name_prefix}-public-without-ip"
   machine_type = "n1-standard-1"
-  zone         = "${data.google_compute_zones.available.names[0]}"
+  zone         = data.google_compute_zones.available.names[0]
 
   allow_stopping_for_update = true
 
-  tags = ["${module.management_network.public}"]
+  tags = [module.management_network.public]
 
   boot_disk {
     initialize_params {
@@ -85,18 +91,18 @@ resource "google_compute_instance" "public_without_ip" {
   }
 
   network_interface {
-    subnetwork = "${module.management_network.public_subnetwork}"
+    subnetwork = module.management_network.public_subnetwork
   }
 }
 
 resource "google_compute_instance" "private_public" {
   name         = "${var.name_prefix}-private-public"
   machine_type = "n1-standard-1"
-  zone         = "${data.google_compute_zones.available.names[0]}"
+  zone         = data.google_compute_zones.available.names[0]
 
   allow_stopping_for_update = true
 
-  tags = ["${module.management_network.private}"]
+  tags = [module.management_network.private]
 
   boot_disk {
     initialize_params {
@@ -105,18 +111,18 @@ resource "google_compute_instance" "private_public" {
   }
 
   network_interface {
-    subnetwork = "${module.management_network.public_subnetwork}"
+    subnetwork = module.management_network.public_subnetwork
   }
 }
 
 resource "google_compute_instance" "private" {
   name         = "${var.name_prefix}-private"
   machine_type = "n1-standard-1"
-  zone         = "${data.google_compute_zones.available.names[0]}"
+  zone         = data.google_compute_zones.available.names[0]
 
   allow_stopping_for_update = true
 
-  tags = ["${module.management_network.private}"]
+  tags = [module.management_network.private]
 
   boot_disk {
     initialize_params {
@@ -125,18 +131,18 @@ resource "google_compute_instance" "private" {
   }
 
   network_interface {
-    subnetwork = "${module.management_network.private_subnetwork}"
+    subnetwork = module.management_network.private_subnetwork
   }
 }
 
 resource "google_compute_instance" "private_persistence" {
   name         = "${var.name_prefix}-private-persistence"
   machine_type = "n1-standard-1"
-  zone         = "${data.google_compute_zones.available.names[0]}"
+  zone         = data.google_compute_zones.available.names[0]
 
   allow_stopping_for_update = true
 
-  tags = ["${module.management_network.private_persistence}"]
+  tags = [module.management_network.private_persistence]
 
   boot_disk {
     initialize_params {
@@ -145,6 +151,7 @@ resource "google_compute_instance" "private_persistence" {
   }
 
   network_interface {
-    subnetwork = "${module.management_network.private_subnetwork}"
+    subnetwork = module.management_network.private_subnetwork
   }
 }
+

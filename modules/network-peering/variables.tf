@@ -5,10 +5,12 @@
 
 variable "first_network" {
   description = "The self_link reference to the first network to peer"
+  type        = string
 }
 
 variable "second_network" {
   description = "The self_link reference to the second network to peer"
+  type        = string
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -18,5 +20,7 @@ variable "second_network" {
 
 variable "name_prefix" {
   description = "A name prefix used in resource names to ensure uniqueness across a project."
-  value       = "peering"
+  type        = string
+  default     = "peering"
 }
+
