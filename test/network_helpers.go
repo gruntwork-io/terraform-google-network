@@ -38,6 +38,5 @@ func GetResourceNameFromSelfLink(link string) string {
 
 func getRandomRegion(t *testing.T, projectID string) string {
 	approvedRegions := []string{"europe-north1", "europe-west1", "europe-west2", "europe-west3", "us-central1", "us-east1", "us-west1"}
-	//approvedRegions := []string{"europe-north1"}
 	return gcp.GetRandomRegion(t, projectID, approvedRegions, []string{})
 }
