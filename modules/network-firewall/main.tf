@@ -8,7 +8,7 @@ data "google_compute_subnetwork" "public_subnetwork" {
 }
 
 data "google_compute_subnetwork" "private_subnetwork" {
-  self_link = var.public_subnetwork
+  self_link = var.private_subnetwork
 }
 
 // Define tags as locals so they can be interpolated off of + exported
@@ -88,4 +88,3 @@ resource "google_compute_firewall" "private_allow_restricted_network_inbound" {
     protocol = "all"
   }
 }
-
