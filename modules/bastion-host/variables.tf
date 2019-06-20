@@ -46,3 +46,9 @@ variable "source_image" {
   default     = "gce-uefi-images/ubuntu-1804-lts"
 }
 
+variable "startup_script" {
+  description = "The script to be executed when the host starts. It could be installing a set of tools to interact with clusters or applications."
+  type        = "string"
+  default     = ""
+}
+
