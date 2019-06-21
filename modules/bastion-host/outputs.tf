@@ -10,5 +10,5 @@ output "address" {
 
 output "private_ip" {
   description = "The private IP of the bastion host."
-  value       = google_compute_instance.bastion.network_interface[0].network_ip
+  value       = google_compute_instance.bastion_host.network_interface[0].network_ip
 }
