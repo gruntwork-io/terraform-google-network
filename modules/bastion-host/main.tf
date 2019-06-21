@@ -8,6 +8,7 @@ terraform {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_instance" "bastion_host" {
+  project      = var.project
   name         = var.instance_name
   machine_type = var.machine_type
   zone         = var.zone
@@ -34,4 +35,3 @@ resource "google_compute_instance" "bastion_host" {
     enable-oslogin = "TRUE"
   }
 }
-
