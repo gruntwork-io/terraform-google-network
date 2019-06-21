@@ -48,7 +48,7 @@ variable "source_image" {
 
 variable "startup_script" {
   description = "The script to be executed when the bastion host starts. It can be used to install additional software and/or configure the host."
-  type        = "string"
+  type        = string
   default     = ""
 }
 
