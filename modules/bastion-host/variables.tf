@@ -46,3 +46,9 @@ variable "source_image" {
   default     = "gce-uefi-images/ubuntu-1804-lts"
 }
 
+variable "startup_script" {
+  description = "The script to be executed when the bastion host starts. It can be used to install additional software and/or configure the host."
+  type        = string
+  default     = ""
+}
+

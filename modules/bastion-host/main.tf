@@ -28,6 +28,8 @@ resource "google_compute_instance" "bastion_host" {
     }
   }
 
+  metadata_startup_script = var.startup_script
+
   metadata = {
     enable-oslogin = "TRUE"
   }
