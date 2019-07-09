@@ -44,7 +44,7 @@ output "private_subnetwork" {
 
 output "private_subnetwork_name" {
   description = "Name of the private subnetwork"
-  value       = google_compute_subnetwork.vpc_subnetwork_private.self_link
+  value       = google_compute_subnetwork.vpc_subnetwork_private.name
 }
 
 output "private_subnetwork_cidr_block" {
@@ -81,4 +81,3 @@ output "private_persistence" {
   description = "The network tag string used for the private-persistence access tier"
   value       = module.network_firewall.private_persistence
 }
-
