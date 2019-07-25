@@ -52,3 +52,8 @@ variable "startup_script" {
   default     = ""
 }
 
+variable "static_ip" {
+  description = "A static IP address to attach to the instance. The default will allocate an ephemeral IP"
+  type        = string
+  default     = null
+}
