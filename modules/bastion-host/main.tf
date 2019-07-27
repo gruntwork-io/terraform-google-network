@@ -24,8 +24,9 @@ resource "google_compute_instance" "bastion_host" {
   network_interface {
     subnetwork = var.subnetwork
 
-    // Provide an empty access_config block to receive an ephemeral IP
+    // If var.static_ip is set use that IP, otherwise this will generate an ephemeral IP
     access_config {
+      nat_ip = var.static_ip
     }
   }
 
