@@ -113,8 +113,9 @@ module "network_firewall" {
 
   name_prefix = var.name_prefix
 
-  project = var.project
-  network = google_compute_network.vpc.self_link
+  project                               = var.project
+  network                               = google_compute_network.vpc.self_link
+  allowed_public_restricted_subnetworks = var.allowed_public_restricted_subnetworks
 
   public_subnetwork  = google_compute_subnetwork.vpc_subnetwork_public.self_link
   private_subnetwork = google_compute_subnetwork.vpc_subnetwork_private.self_link

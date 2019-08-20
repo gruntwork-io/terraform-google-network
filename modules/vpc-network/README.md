@@ -43,6 +43,8 @@ reach them. All other inbound traffic is denied, including internal traffic;
 
 * `public` - allow inbound traffic from all sources
 
+* `public-restricted` - allow inbound traffic from specific subnetworks on the internet
+
 * `private` - allow inbound traffic from within this network
 
 * `private-persistence` - allow inbound traffic from tagged sources within this network, excluding instances tagged

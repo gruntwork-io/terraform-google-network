@@ -65,3 +65,8 @@ variable "enable_flow_logging" {
   default     = true
 }
 
+variable allowed_public_restricted_subnetworks {
+  description = "The public networks that is allowed access to the public_restricted subnetwork of the network"
+  default     = []
+  type        = list(string)
+}

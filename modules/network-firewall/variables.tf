@@ -13,6 +13,12 @@ variable "public_subnetwork" {
   type        = string
 }
 
+variable allowed_public_restricted_subnetworks {
+  description = "The public networks that is allowed access to the public_restricted subnetwork of the network"
+  default     = []
+  type        = list(string)
+}
+
 variable "private_subnetwork" {
   description = "A reference (self_link) to the private subnetwork of the network"
   type        = string
@@ -27,4 +33,3 @@ variable "name_prefix" {
   description = "A name prefix used in resource names to ensure uniqueness across a project."
   type        = string
 }
-

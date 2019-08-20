@@ -11,10 +11,12 @@ The default firewall rules on GCP block inbound traffic and allow outbound traff
 connection is allowed between a source and a target or a target and a destination, all subsequent traffic in either
 direction will be allowed as long as the connection is active.
 
-This module adds rules for 3 [network `tags`](https://cloud.google.com/vpc/docs/add-remove-network-tags) that can be
+This module adds rules for 4 [network `tags`](https://cloud.google.com/vpc/docs/add-remove-network-tags) that can be
 applied to instances, similar to the division between subnetworks.
 
 * `public` - allow inbound traffic from all sources
+
+* `public-restricted` - allow inbound traffic from specific subnetworks on the internet
 
 * `private` - allow inbound traffic from within this network
 
