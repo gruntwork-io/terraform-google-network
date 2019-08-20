@@ -28,3 +28,8 @@ variable "name_prefix" {
   type        = string
 }
 
+variable allowed_public_networks {
+  description = "The public networks that is allowed access to public_subnetwork"
+  default = ["0.0.0.0/0"]
+  type = list(string)
+}

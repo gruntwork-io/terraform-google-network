@@ -115,6 +115,7 @@ module "network_firewall" {
 
   project = var.project
   network = google_compute_network.vpc.self_link
+  allowed_public_networks = var.allowed_public_networks
 
   public_subnetwork  = google_compute_subnetwork.vpc_subnetwork_public.self_link
   private_subnetwork = google_compute_subnetwork.vpc_subnetwork_private.self_link
