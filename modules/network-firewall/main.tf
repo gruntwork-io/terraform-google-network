@@ -14,6 +14,7 @@ data "google_compute_subnetwork" "private_subnetwork" {
 // Define tags as locals so they can be interpolated off of + exported
 locals {
   public              = "public"
+  public_restricted   = "public-restricted"
   private             = "private"
   private_persistence = "private-persistence"
 }
@@ -38,6 +39,31 @@ resource "google_compute_firewall" "public_allow_all_inbound" {
     protocol = "all"
   }
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# public - allow ingress from specific sources
+# ---------------------------------------------------------------------------------------------------------------------
+
+resource "google_compute_firewall" "public_restricted_allow_inbound" {
+
+  count = "${length(var.allowed_public_restricted_subnetworks) > 0 ? 1 : 0}"
+
+  name = "${var.name_prefix}-public-restricted-allow-ingress"
+
+  project = var.project
+  network = var.network
+
+  target_tags   = [local.public_restricted]
+  direction     = "INGRESS"
+  source_ranges = var.allowed_public_restricted_subnetworks
+
+  priority = "1000"
+
+  allow {
+    protocol = "all"
+  }
+}
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 # private - allow ingress from within this network

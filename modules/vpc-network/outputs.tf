@@ -72,6 +72,11 @@ output "public" {
   value       = module.network_firewall.public
 }
 
+output "public_restricted" {
+  description = "The string of the public tag"
+  value       = module.network_firewall.public_restricted
+}
+
 output "private" {
   description = "The network tag string used for the private access tier"
   value       = module.network_firewall.private
