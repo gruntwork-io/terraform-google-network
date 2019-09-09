@@ -20,16 +20,16 @@ locals {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
-# public - allow ingress from anywhere
+# public - allow ingress from restricted networks
 # ---------------------------------------------------------------------------------------------------------------------
 
-resource "google_compute_firewall" "public_allow_all_inbound" {
-  name = "${var.name_prefix}-public-allow-ingress"
+resource "google_compute_firewall" "public_allow_restricted_inbound" {
+  name = "${var.name_prefix}-public-allow-restricted-ingress"
 
   project = var.project
   network = var.network
 
-  target_tags   = [local.public]
+  target_tags   = [local.public_restricted]
   direction     = "INGRESS"
   source_ranges = ["0.0.0.0/0"]
 
