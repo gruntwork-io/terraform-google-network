@@ -46,7 +46,7 @@ resource "google_compute_firewall" "public_allow_all_inbound" {
 
 resource "google_compute_firewall" "public_restricted_allow_inbound" {
 
-  count = "${length(var.allowed_public_restricted_subnetworks) > 0 ? 1 : 0}"
+  count = length(var.allowed_public_restricted_subnetworks) > 0 ? 1 : 0
 
   name = "${var.name_prefix}-public-restricted-allow-ingress"
 
