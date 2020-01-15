@@ -6,7 +6,7 @@ application networks with network peering to access environments like `productio
 ## What are the instances included in this example?
 
 See the diagram below for a visual guide to the instances defined in this example. You can see an example of which
-connections between them are valid by browsing the test cases under [this example's tests](../../test/network_test.go)
+connections between them are valid by browsing the test cases under [this example's tests](../../test/management_network_test.go)
 
 ![Network Diagram](https://raw.githubusercontent.com/gruntwork-io/terraform-google-network/master/.img/management-network-diagram.png)
 
