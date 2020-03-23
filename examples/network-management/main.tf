@@ -33,6 +33,7 @@ resource "google_compute_instance" "default_network" {
   name         = "${var.name_prefix}-default-network"
   machine_type = "n1-standard-1"
   zone         = data.google_compute_zones.available.names[0]
+  project      = var.project
 
   allow_stopping_for_update = true
 
@@ -43,7 +44,8 @@ resource "google_compute_instance" "default_network" {
   }
 
   network_interface {
-    network = "default"
+    subnetwork = "default"
+    subnetwork_project = var.project
 
     access_config {
       // Ephemeral IP
@@ -55,6 +57,7 @@ resource "google_compute_instance" "public_with_ip" {
   name         = "${var.name_prefix}-public-with-ip"
   machine_type = "n1-standard-1"
   zone         = data.google_compute_zones.available.names[0]
+  project      = var.project
 
   allow_stopping_for_update = true
 
@@ -79,6 +82,7 @@ resource "google_compute_instance" "public_without_ip" {
   name         = "${var.name_prefix}-public-without-ip"
   machine_type = "n1-standard-1"
   zone         = data.google_compute_zones.available.names[0]
+  project      = var.project
 
   allow_stopping_for_update = true
 
@@ -99,6 +103,7 @@ resource "google_compute_instance" "private_public" {
   name         = "${var.name_prefix}-private-public"
   machine_type = "n1-standard-1"
   zone         = data.google_compute_zones.available.names[0]
+  project      = var.project
 
   allow_stopping_for_update = true
 
@@ -119,6 +124,7 @@ resource "google_compute_instance" "private" {
   name         = "${var.name_prefix}-private"
   machine_type = "n1-standard-1"
   zone         = data.google_compute_zones.available.names[0]
+  project      = var.project
 
   allow_stopping_for_update = true
 
@@ -139,6 +145,7 @@ resource "google_compute_instance" "private_persistence" {
   name         = "${var.name_prefix}-private-persistence"
   machine_type = "n1-standard-1"
   zone         = data.google_compute_zones.available.names[0]
+  project      = var.project
 
   allow_stopping_for_update = true
 
