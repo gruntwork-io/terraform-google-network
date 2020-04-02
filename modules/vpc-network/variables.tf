@@ -59,10 +59,14 @@ variable "secondary_cidr_subnetwork_spacing" {
   default     = 0
 }
 
-variable "enable_flow_logging" {
-  description = "Whether to enable VPC Flow Logs being sent to Stackdriver (https://cloud.google.com/vpc/docs/using-flow-logs)"
-  type        = bool
-  default     = true
+variable "log_config" {
+  description = "The logging options for the subnetwork flow logs."
+  type        = object({
+    aggregation_interval = string
+    flow_sampling        = number
+    metadata             = string
+  })
+  default     = null
 }
 
 variable allowed_public_restricted_subnetworks {
