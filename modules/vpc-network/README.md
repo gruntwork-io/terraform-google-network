@@ -5,28 +5,28 @@ Google Cloud Platform (GCP) following best practices.
 
 When configuring networks for your organisation, you should generally define these "types" of networks:
 
-* `management` - a single network that runs your internal services such as DevOps services like Jenkins, peering to your
-application networks. This network should run in the same project as its services.
+- `management` - a single network that runs your internal services such as DevOps services like Jenkins, peering to your
+  application networks. This network should run in the same project as its services.
 
-* `application`- a network per environment (`staging`, `production`, etc.), running multiple services owned by multiple
-teams. Most application networks should be [host projects](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/project-host-configuration),
-allowing you to share a single network across multiple "service" projects that each contain a single application or
-service. See [host project](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/project-host-configuration)
-for more details.
+- `application`- a network per environment (`staging`, `production`, etc.), running multiple services owned by multiple
+  teams. Most application networks should be [host projects](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/project-host-configuration),
+  allowing you to share a single network across multiple "service" projects that each contain a single application or
+  service. See [host project](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/project-host-configuration)
+  for more details.
 
 For more details on specific configuration of each type, see the [examples](https://github.com/gruntwork-io/terraform-google-network/tree/master/examples)
 provided in this module.
 
 ## How do you use this module?
 
-* See the [root README](https://github.com/gruntwork-io/terraform-google-network/blob/master/README.md) for instructions
-on using Terraform modules.
-* See the [examples](https://github.com/gruntwork-io/terraform-google-network/tree/master/examples) folder for example
-usage.
-* See [variables.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/modules/vpc-network/variables.tf)
-for all the variables you can set on this module.
-* See [outputs.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/modules/vpc-network/outputs.tf)
-for all the variables that are outputted by this module.
+- See the [root README](https://github.com/gruntwork-io/terraform-google-network/blob/master/README.md) for instructions
+  on using Terraform modules.
+- See the [examples](https://github.com/gruntwork-io/terraform-google-network/tree/master/examples) folder for example
+  usage.
+- See [variables.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/modules/vpc-network/variables.tf)
+  for all the variables you can set on this module.
+- See [outputs.tf](https://github.com/gruntwork-io/terraform-google-network/blob/master/modules/vpc-network/outputs.tf)
+  for all the variables that are outputted by this module.
 
 ## What is a VPC network?
 
@@ -41,30 +41,30 @@ intended traffic is able to reach your infrastructure.
 Instances in the network must be tagged with the following network tags in order for inbound traffic to be allowed to
 reach them. All other inbound traffic is denied, including internal traffic;
 
-* `public` - allow inbound traffic from all sources
+- `public` - allow inbound traffic from all sources
 
-* `public-restricted` - allow inbound traffic from specific subnetworks on the internet
+- `public-restricted` - allow inbound traffic from specific subnetworks on the internet
 
-* `private` - allow inbound traffic from within this network
+- `private` - allow inbound traffic from within this network
 
-* `private-persistence` - allow inbound traffic from tagged sources within this network, excluding instances tagged
-`public`
+- `private-persistence` - allow inbound traffic from tagged sources within this network, excluding instances tagged
+  `public`
 
 See the [network-firewall](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/network-firewall)
 submodule for more details.
 
 A VPC network defines two subnetworks instances can reside in;
 
-* `public` - instances are able to communicate over the public internet through Cloud NAT if an external IP was not
-provided
+- `public` - instances are able to communicate over the public internet through Cloud NAT if an external IP was not
+  provided
 
-* `private` - instances are exclusively able to communicate within your network or with private Google services if an
-external IP was not provided
+- `private` - instances are exclusively able to communicate within your network or with private Google services if an
+  external IP was not provided
 
 ## What is Private Google Access?
 
 [Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access) is a GCP feature where
-instances within your network that don't have public IP addresses assigned can  access most Google APIs and services
+instances within your network that don't have public IP addresses assigned can access most Google APIs and services
 without NAT or a bastion. Private Google Access is enabled at the subnetwork level, and subnetworks created using this
 module will have Private Google Access enabled.
 
@@ -95,8 +95,7 @@ This module automatically configures secondary ranges for use with alias IP.
 [VPC Flow Logs](https://cloud.google.com/vpc/docs/using-flow-logs) are a feature where subnetworks in your network will
 have their traffic flow between VM instances sampled and sent to Stackdriver; there, you can use them for a variety of
 purposes including forensics and expense optimization. Only TCP and UDP traffic is logged. Flow logging is enabled by
-default in this module, and can be disabled by settings `enable_flow_logging` to false.
-
+default in this module, and can be disabled by setting the `log_config` variable to `null`.
 
 ## Network Architecture
 
@@ -107,10 +106,10 @@ to do so.
 
 Additionally, the hard distinction between "Application" and "Management" in terms of tiers has been removed- either
 can include or exclude "persistence" instances. Instead, Whaley's "Application" networks are generally host networks
-with attached service projects, and "Management" networks should be used with services inside the same project. 
+with attached service projects, and "Management" networks should be used with services inside the same project.
 
 ## Gotchas
 
-In order to allow any inter-network communication, instances *must* be tagged with one of `public`, `private`, or
+In order to allow any inter-network communication, instances _must_ be tagged with one of `public`, `private`, or
 `private-persistence`. See the [network-firewall](https://github.com/gruntwork-io/terraform-google-network/tree/master/modules/network-firewall)
 submodule for more details.
