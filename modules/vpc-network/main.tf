@@ -80,6 +80,15 @@ resource "google_compute_router_nat" "vpc_nat" {
     name                    = google_compute_subnetwork.vpc_subnetwork_private.self_link
     source_ip_ranges_to_nat = ["ALL_IP_RANGES"]
   }
+
+  dynamic "log_config" {
+    for_each = var.nat_log_config == null ? [] : list(var.nat_log_config)
+
+    content {
+      enable = var.nat_log_config.enable
+      filter = var.nat_log_config.filter
+    }
+  }
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
