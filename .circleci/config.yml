@@ -56,22 +56,22 @@ jobs:
 
       # Install external dependencies
       - run:
-        name: update gcloud
-        command: |
-          sudo apt-get remove -y google-cloud-sdk
-          sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
-          sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update beta kubectl
+          name: update gcloud
+          command: |
+            sudo apt-get remove -y google-cloud-sdk
+            sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+            sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update beta kubectl
 
       - run:
-        name: configure gcp auth
-        command: |
-          # required for gcloud and kubectl to authenticate correctly
-          echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
-          gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-          gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-          # required for terraform and terratest to authenticate correctly
-          echo $GCLOUD_SERVICE_KEY > /tmp/gcloud.json
-          export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud.json"
+          name: configure gcp auth
+          command: |
+            # required for gcloud and kubectl to authenticate correctly
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            # required for terraform and terratest to authenticate correctly
+            echo $GCLOUD_SERVICE_KEY > /tmp/gcloud.json
+            export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud.json"
 
       - run:
           name: run tests
