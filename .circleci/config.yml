@@ -1,82 +1,70 @@
+version: 2.1
+
 defaults: &defaults
   machine: true
+
+env: &env
   environment:
-    GRUNTWORK_INSTALLER_VERSION: v0.0.21
-    TERRATEST_LOG_PARSER_VERSION: v0.13.13
-    MODULE_CI_VERSION: v0.13.3
-    TERRAFORM_VERSION: 0.12.1
+    GRUNTWORK_INSTALLER_VERSION: v0.0.30
+    TERRATEST_LOG_PARSER_VERSION: v0.30.4
+    MODULE_CI_VERSION: v0.29.1
+    TERRAFORM_VERSION: 0.13.5
     TERRAGRUNT_VERSION: NONE
-    PACKER_VERSION: NONE
-    GOLANG_VERSION: 1.11.2
-    K8S_VERSION: v1.10.0
-    KUBECONFIG: /home/circleci/.kube/config
+    PACKER_VERSION: 1.6.2
+    GOLANG_VERSION: 1.13.8
 
-install_gruntwork_utils: &install_gruntwork_utils
-  name: install gruntwork utils
-  command: |
-    curl -Ls https://raw.githubusercontent.com/gruntwork-io/gruntwork-installer/master/bootstrap-gruntwork-installer.sh | bash /dev/stdin --version "${GRUNTWORK_INSTALLER_VERSION}"
-    gruntwork-install --module-name "gruntwork-module-circleci-helpers" --repo "https://github.com/gruntwork-io/module-ci" --tag "${MODULE_CI_VERSION}"
-    gruntwork-install --binary-name "terratest_log_parser" --repo "https://github.com/gruntwork-io/terratest" --tag "${TERRATEST_LOG_PARSER_VERSION}"
-    configure-environment-for-gruntwork-module \
-      --circle-ci-2-machine-executor \
-      --terraform-version ${TERRAFORM_VERSION} \
-      --terragrunt-version ${TERRAGRUNT_VERSION} \
-      --packer-version ${PACKER_VERSION} \
-      --use-go-dep \
-      --go-version ${GOLANG_VERSION} \
-      --go-src-path test
-
-version: 2
 jobs:
-  build:
-    <<: *defaults
+  precommit:
+    <<: *env
+    docker:
+      - image: circleci/python:3.8.1
     steps:
       - checkout
-      - restore_cache:
-          keys:
-          - dep-v1-{{ checksum "test/Gopkg.lock" }}
 
-      # Install gruntwork utilities
       - run:
-          <<: *install_gruntwork_utils
-
-      - save_cache:
-          key: dep-v1-{{ checksum "test/Gopkg.lock" }}
-          paths:
-          - ./test/vendor
-
+          name: install dependencies
+          command: |
+            curl -Ls https://raw.githubusercontent.com/gruntwork-io/gruntwork-installer/master/bootstrap-gruntwork-installer.sh | bash /dev/stdin --version "${GRUNTWORK_INSTALLER_VERSION}"
+            gruntwork-install --module-name "gruntwork-module-circleci-helpers" --repo "https://github.com/gruntwork-io/module-ci" --tag "${MODULE_CI_VERSION}"
+            configure-environment-for-gruntwork-module \
+              --terraform-version ${TERRAFORM_VERSION} \
+              --terragrunt-version NONE \
+              --packer-version NONE \
+              --go-version ${GOLANG_VERSION}
       # Fail the build if the pre-commit hooks don't pass. Note: if you run pre-commit install locally, these hooks will
       # execute automatically every time before you commit, ensuring the build never fails at this step!
-      - run: pip install pre-commit==1.11.2 cfgv==2.0.1
-      - run: pre-commit install
-      - run: pre-commit run --all-files
-
-      - persist_to_workspace:
-          root: /home/circleci
-          paths:
-            - project
-            - terraform
-            - packer
+      - run:
+          command: |
+            pip install pre-commit==1.21.0 cfgv==2.0.1 zipp==1.1.0 yapf
+            pre-commit install
+            pre-commit run --all-files
 
   test:
     <<: *defaults
+    <<: *env
     steps:
-    - attach_workspace:
-        at: /home/circleci
-    - checkout
-    - run: echo 'export PATH=$HOME/terraform:$HOME/packer:$PATH' >> $BASH_ENV
-    - run:
-          <<: *install_gruntwork_utils
-    - run:
+      - checkout
+      - run: &install_gruntwork_tooling
+          name: install gruntwork tooling
+          command: |
+            sudo apt-get -y update
+            curl -Ls https://raw.githubusercontent.com/gruntwork-io/gruntwork-installer/master/bootstrap-gruntwork-installer.sh | bash /dev/stdin --version "${GRUNTWORK_INSTALLER_VERSION}"
+            gruntwork-install --module-name "gruntwork-module-circleci-helpers" --repo "https://github.com/gruntwork-io/module-ci" --tag "${MODULE_CI_VERSION}"
+            gruntwork-install --module-name "git-helpers" --repo "https://github.com/gruntwork-io/module-ci" --tag "${MODULE_CI_VERSION}"
+            gruntwork-install --binary-name "terratest_log_parser" --repo "https://github.com/gruntwork-io/terratest" --tag "${TERRATEST_LOG_PARSER_VERSION}"
+            configure-environment-for-gruntwork-module --go-src-path ./test --terraform-version ${TERRAFORM_VERSION} --terragrunt-version ${TERRAGRUNT_VERSION} --packer-version ${PACKER_VERSION} --go-version ${GOLANG_VERSION}
+
+      # Install external dependencies
+      - run:
         name: update gcloud
         command: |
           sudo apt-get remove -y google-cloud-sdk
           sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
           sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update beta kubectl
-    - run:
-        name: run tests
+
+      - run:
+        name: configure gcp auth
         command: |
-          mkdir -p /tmp/logs
           # required for gcloud and kubectl to authenticate correctly
           echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
           gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
@@ -84,22 +72,39 @@ jobs:
           # required for terraform and terratest to authenticate correctly
           echo $GCLOUD_SERVICE_KEY > /tmp/gcloud.json
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud.json"
-          # run the tests
-          run-go-tests --path test --timeout 60m | tee /tmp/logs/all.log
-        no_output_timeout: 3600s
-    - run:
-        command: terratest_log_parser --testlog /tmp/logs/all.log --outputdir /tmp/logs
-        when: always
-    - store_artifacts:
-        path: /tmp/logs
-    - store_test_results:
-        path: /tmp/logs
+
+      - run:
+          name: run tests
+          command: |
+            mkdir -p /tmp/logs
+            run-go-tests --path test --timeout 2h | tee /tmp/logs/all.log
+          no_output_timeout: 1h
+
+      - run:
+          name: parse test output
+          command: terratest_log_parser --testlog /tmp/logs/all.log --outputdir /tmp/logs
+          when: always
+
+      - store_artifacts:
+          path: /tmp/logs
+      - store_test_results:
+          path: /tmp/logs
 
 workflows:
   version: 2
-  build-and-test:
+  test:
     jobs:
-    - build
-    - test:
-        requires:
-        - build
+      # We have to explicitly tell CircleCI to run on all tags and branches, or tag commits/pushes will not trigger
+      # builds: https://circleci.com/docs/2.0/workflows/#git-tag-job-execution.
+      - precommit:
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
+      - test:
+          requires:
+            - precommit
+          filters:
+            tags:
+              only: /^v.*/
