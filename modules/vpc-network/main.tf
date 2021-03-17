@@ -54,6 +54,15 @@ resource "google_compute_subnetwork" "vpc_subnetwork_public" {
       0
     )
   }
+  
+  secondary_ip_range {
+    range_name = "public-services-2"
+    ip_cidr_range = cidrsubnet(
+      var.second_secondary_cidr_block,
+      var.secondary_cidr_subnetwork_width_delta,
+      0
+    )
+  }
 
   dynamic "log_config" {
     for_each = var.log_config == null ? [] : list(var.log_config)
