@@ -33,6 +33,14 @@ output "public_subnetwork_secondary_range_name" {
   value = google_compute_subnetwork.vpc_subnetwork_public.secondary_ip_range[0].range_name
 }
 
+output "public_services_secondary_cidr_block" {
+  value = google_compute_subnetwork.vpc_subnetwork_public.secondary_ip_range[1].ip_cidr_range
+}
+
+output "public_services_secondary_range_name" {
+  value = google_compute_subnetwork.vpc_subnetwork_public.secondary_ip_range[1].range_name
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Private Subnetwork Outputs
 # ---------------------------------------------------------------------------------------------------------------------
