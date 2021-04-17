@@ -41,6 +41,18 @@ variable "cidr_subnetwork_spacing" {
   default     = 0
 }
 
+variable "public_subnetwork_secondary_range_name" {
+  description = "The name associated with the pod subnetwork secondary range, used when adding an alias IP range to a VM instance. The name must be 1-63 characters long, and comply with RFC1035. The name must be unique within the subnetwork."
+  type        = string
+  default     = "public-cluster"
+}
+
+variable "public_services_secondary_range_name" {
+  description = "The name associated with the services subnetwork secondary range, used when adding an alias IP range to a VM instance. The name must be 1-63 characters long, and comply with RFC1035. The name must be unique within the subnetwork."
+  type        = string
+  default     = "public-services"
+}
+
 variable "secondary_cidr_block" {
   description = "The IP address range of the VPC's secondary address range in CIDR notation. A prefix of /16 is recommended. Do not use a prefix higher than /27."
   type        = string
