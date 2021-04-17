@@ -74,6 +74,18 @@ variable "log_config" {
   }
 }
 
+variable "nat_log_config" {
+  description = "The logging options for the NAT flow logs. see https://www.terraform.io/docs/providers/google/r/compute_router_nat.html#log_config for more information and examples."
+  type = object({
+    enable = bool
+    filter = string
+  })
+  default = {
+    enable = true
+    filter = "ERRORS_ONLY"
+  }
+}
+
 variable allowed_public_restricted_subnetworks {
   description = "The public networks that is allowed access to the public_restricted subnetwork of the network"
   default     = []
