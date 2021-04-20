@@ -43,7 +43,7 @@ variable "machine_type" {
 variable "source_image" {
   description = "The source image to build the VM using. Specified by path reference or by {{project}}/{{image-family}}"
   type        = string
-  default     = "gce-uefi-images/ubuntu-1804-lts"
+  default     = "ubuntu-os-cloud/ubuntu-1804-lts"
 }
 
 variable "startup_script" {
