@@ -83,6 +83,7 @@ resource "google_compute_firewall" "private_allow_all_network_inbound" {
   source_ranges = [
     data.google_compute_subnetwork.public_subnetwork.ip_cidr_range,
     data.google_compute_subnetwork.public_subnetwork.secondary_ip_range[0].ip_cidr_range,
+    data.google_compute_subnetwork.public_subnetwork.secondary_ip_range[1].ip_cidr_range,
     data.google_compute_subnetwork.private_subnetwork.ip_cidr_range,
     data.google_compute_subnetwork.private_subnetwork.secondary_ip_range[0].ip_cidr_range,
   ]
