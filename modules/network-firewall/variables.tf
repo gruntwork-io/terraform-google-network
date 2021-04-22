@@ -13,7 +13,7 @@ variable "public_subnetwork" {
   type        = string
 }
 
-variable allowed_public_restricted_subnetworks {
+variable "allowed_public_restricted_subnetworks" {
   description = "The public networks that is allowed access to the public_restricted subnetwork of the network"
   default     = []
   type        = list(string)
