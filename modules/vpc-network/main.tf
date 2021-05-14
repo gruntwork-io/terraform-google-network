@@ -65,7 +65,7 @@ resource "google_compute_subnetwork" "vpc_subnetwork_public" {
   }
 
   dynamic "log_config" {
-    for_each = var.log_config == null ? [] : list(var.log_config)
+    for_each = var.log_config == null ? [] : tolist([var.log_config])
 
     content {
       aggregation_interval = var.log_config.aggregation_interval
@@ -121,7 +121,7 @@ resource "google_compute_subnetwork" "vpc_subnetwork_private" {
   }
 
   dynamic "log_config" {
-    for_each = var.log_config == null ? [] : list(var.log_config)
+    for_each = var.log_config == null ? [] : tolist([var.log_config])
 
     content {
       aggregation_interval = var.log_config.aggregation_interval
