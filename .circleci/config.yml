@@ -1,7 +1,8 @@
 version: 2.1
 
 defaults: &defaults
-  machine: true
+  machine:
+    image: ubuntu-2004:202104-01
 
 env: &env
   environment:
@@ -56,14 +57,6 @@ jobs:
             gruntwork-install --module-name "git-helpers" --repo "https://github.com/gruntwork-io/terraform-aws-ci" --tag "${MODULE_CI_VERSION}"
             gruntwork-install --binary-name "terratest_log_parser" --repo "https://github.com/gruntwork-io/terratest" --tag "${TERRATEST_LOG_PARSER_VERSION}"
             configure-environment-for-gruntwork-module --go-src-path ./test --terraform-version ${TERRAFORM_VERSION} --terragrunt-version ${TERRAGRUNT_VERSION} --packer-version ${PACKER_VERSION} --go-version ${GOLANG_VERSION}
-
-      # Install external dependencies
-      - run:
-          name: update gcloud
-          command: |
-            sudo apt-get remove -y google-cloud-sdk
-            sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
-            sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update beta kubectl
 
       - run:
           name: run tests
