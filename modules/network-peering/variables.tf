@@ -24,3 +24,15 @@ variable "name_prefix" {
   default     = "peering"
 }
 
+variable "export_custom_routes" {
+  description = "Export custom routes to the peered network"
+  type        = bool
+  default     = false
+}
+
+variable "import_custom_routes" {
+  description = "Import custom routes from the peered network"
+  type        = bool
+  default     = false
+}
+

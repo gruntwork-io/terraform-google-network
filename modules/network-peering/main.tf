@@ -6,13 +6,17 @@ terraform {
 }
 
 resource "google_compute_network_peering" "first" {
-  name         = "${var.name_prefix}-first"
-  network      = var.first_network
-  peer_network = var.second_network
+  name                 = "${var.name_prefix}-first"
+  network              = var.first_network
+  peer_network         = var.second_network
+  import_custom_routes = var.import_custom_routes
+  export_custom_routes = var.export_custom_routes
 }
 
 resource "google_compute_network_peering" "second" {
-  name         = "${var.name_prefix}-second"
-  network      = var.second_network
-  peer_network = var.first_network
+  name                 = "${var.name_prefix}-second"
+  network              = var.second_network
+  peer_network         = var.first_network
+  import_custom_routes = var.import_custom_routes
+  export_custom_routes = var.export_custom_routes
 }
