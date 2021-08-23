@@ -37,7 +37,7 @@ variable "tag" {
 variable "machine_type" {
   description = "The machine type of the instance."
   type        = string
-  default     = "f1-micro"
+  default     = "e2-micro"
 }
 
 variable "source_image" {
