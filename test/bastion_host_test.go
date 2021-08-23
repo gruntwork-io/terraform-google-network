@@ -81,11 +81,11 @@ func TestBastionHost(t *testing.T) {
 
 		sshChecks := []SSHCheck{
 			// Success
-			{"bastion", func(t *testing.T) { testSSHOn1Host(t, ExpectSuccess, bastionHost) }},
+			//{"bastion", func(t *testing.T) { testSSHOn1Host(t, ExpectSuccess, bastionHost) }},
 			{"bastion to private", func(t *testing.T) { testSSHOn2Hosts(t, ExpectSuccess, bastionHost, privateHost) }},
 
 			// Failure
-			{"private", func(t *testing.T) { testSSHOn1Host(t, ExpectFailure, privateHost) }},
+			//{"private", func(t *testing.T) { testSSHOn1Host(t, ExpectFailure, privateHost) }},
 		}
 
 		// We need to run a series of parallel funcs inside a serial func in order to ensure that defer statements are ran after they've all completed
